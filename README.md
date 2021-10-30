@@ -6,3 +6,15 @@ haarcascade_frontalface_default.xml file for face detection
 
 
 
+
+Files description:
+.ebextensions - required for aws deployment
+
+
+AWS Cloud:
+
+installing tool for deployment:
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install-windows.html
+
+
+eb init -p python-3.7 flask-tutorial --region eu-west-2
