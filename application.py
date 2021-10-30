@@ -17,4 +17,4 @@ def video():
 
 
 if __name__ == "__main__":
-    application.run(debug=True)
+    application.run('127.0.0.1', 80, debug=True)
