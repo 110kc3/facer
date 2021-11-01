@@ -15,6 +15,7 @@ video_capture = cv2.VideoCapture(0)
 
 def get_faces(faces_location):
 
+    #getting files location
     path, dirs, files = next(os.walk(faces_location))
     file_count = len(files)
     print("Files location: " + str(files))
@@ -47,8 +48,9 @@ def get_faces(faces_location):
         pil_image.save(img_byte_arr, format='PNG')
         img_byte_arr = img_byte_arr.getvalue()
 
-        yield(b'--frame\r\n'
-                    b'Content-Type: image/jpg\r\n\r\n' + img_byte_arr + b'\r\n')
+        return(img_byte_arr)
+        # yield(b'--frame\r\n'
+        #             b'Content-Type: image/jpg\r\n\r\n' + img_byte_arr + b'\r\n')
 
 
 # Load a sample picture and learn how to recognize it.

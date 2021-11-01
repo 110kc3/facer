@@ -5,12 +5,25 @@
 <body>
 
 
+
+  <h1>Face Upload</h1>
+  <form method="POST" action="" enctype="multipart/form-data">
+    <p><input type="file" name="file" accept="image/*"></p>
+    <p><input type="submit" value="Submit"></p>
+  </form>
+
   
   <button onclick="show_faces()">Show known faces</button>
   <br></br>
   <div id="faces">
       <img data-src="{{ url_for('known_faces') }}" width="10%" />
   </div>
+
+  <!-- {% for known_faces in links %}
+  <img data-src="{{ url_for('known_faces') }}"/>
+  {% endfor %} -->
+
+  
   
     <br></br>
     <!-- <h1>Camera</h1> -->
@@ -28,12 +41,24 @@
 
 <script>
 function show_faces() {
-  document.getElementById('faces').style.maxHeight = "200px";
+  const parent = document.getElementById('faces').style.maxHeight = "200px";
   var images = document.querySelectorAll("#faces img");
-  for(var i = 0; i < images.length; i++)
-  {
-    images[i].src = images[i].getAttribute('data-src');
-  }
+
+  console.log(images)
+  // console.log(images[0])
+  // console.log(images[1])
+  console.log(images.length)
+
+
+
+  images[0].src = images[0].getAttribute('data-src');
+
+  // for(var i = 0; i < images.length; i++)
+  // {
+  //   // images[i].src = images[i].getAttribute('data-src');
+  //   document.body.appendChild(images[i].getAttribute('data-src'))
+
+  // }
 }
 
 function show_cam() {
