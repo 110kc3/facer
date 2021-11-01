@@ -4,12 +4,26 @@
 
 <body>
     <h1>Camera</h1>
-    <div>
+    <button onclick="show()">Show Camera</button>
 
-        <img src="{{ url_for('video') }}" width="50%" />
+    <div id="cam1" class="class1">
+
+        <img data-src="{{ url_for('video') }}" width="50%" />
     </div>
 
 </body>
 
 
 </html>
+
+<script>
+function show() {
+  document.getElementById('cam1').style.maxHeight = "200px";
+  var images = document.querySelectorAll("#cam1 img");
+  for(var i = 0; i < images.length; i++)
+  {
+    images[i].src = images[i].getAttribute('data-src');
+  }
+}
+
+</script>

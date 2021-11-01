@@ -9,7 +9,7 @@ haarcascade_frontalface_default.xml file for face detection
 
 ## Prerequisites for local usage
 
-1. Installing python
+1. Installing python/pip
 
 https://www.python.org/downloads/
 
@@ -17,12 +17,12 @@ Add Python to the Windows Path
 https://geek-university.com/python/add-python-to-the-windows-path/
 
 Install pip
+
 python -m pip install --upgrade pip
 
 2. Install virtual environment
 
 pip install virtualenv
-
 
 3. Run flask server locally
 

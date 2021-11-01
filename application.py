@@ -13,7 +13,7 @@ def index():
 
 
 @application.route('/video')
-#called in index.xml
+#called in index.html
 def video():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
