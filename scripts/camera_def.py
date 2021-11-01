@@ -2,10 +2,54 @@
 import face_recognition
 import cv2
 import numpy as np
+from PIL import Image #cutting face from an image
+import io #converting <class 'PIL.Image.Image'> to byte array
+
+import os #counting number of files in folder
 
 
 # Get a reference to webcam #0 (the default one)
 video_capture = cv2.VideoCapture(0)
+
+
+
+def get_faces(faces_location):
+
+    path, dirs, files = next(os.walk(faces_location))
+    file_count = len(files)
+    print("Files location: " + str(files))
+    print("file_count : " + str(file_count))
+
+    for face in files:
+
+        face_location = faces_location+face
+        # Load a second sample picture and learn how to recognize it.
+        new_image = face_recognition.load_image_file(face_location)
+        new_face_encoding = face_recognition.face_encodings(new_image)[0]
+        new_face_location = face_recognition.face_locations(new_image)
+
+        # print("I found {} face(s) in this photograph.".format(len(kamil_face_location)))
+
+        #Getting location of only 1st found face
+        top, right, bottom, left = new_face_location[0] #<class 'tuple'>
+
+        # print(type(kamil_face_location[0])) 
+
+        #Accessing face itself 
+        # print("A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}".format(top, left, bottom, right))
+        face_image = new_image[top:bottom, left:right]
+        pil_image = Image.fromarray(face_image)
+
+        # print("pil_image is type " + str(type(pil_image)))
+
+        #converting <class 'PIL.Image.Image'> to byte array
+        img_byte_arr = io.BytesIO()
+        pil_image.save(img_byte_arr, format='PNG')
+        img_byte_arr = img_byte_arr.getvalue()
+
+        yield(b'--frame\r\n'
+                    b'Content-Type: image/jpg\r\n\r\n' + img_byte_arr + b'\r\n')
+
 
 # Load a sample picture and learn how to recognize it.
 obama_image = face_recognition.load_image_file("static\\obama.jpg")
@@ -19,6 +63,7 @@ biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
 # Load a second sample picture and learn how to recognize it.
 kamil_image = face_recognition.load_image_file("static\\kamil.jpg")
 kamil_face_encoding = face_recognition.face_encodings(kamil_image)[0]
+kamil_face_location = face_recognition.face_locations(kamil_image)
 
 # Create arrays of known face encodings and their names
 known_face_encodings = [

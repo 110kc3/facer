@@ -3,9 +3,19 @@
 
 
 <body>
-    <h1>Camera</h1>
-    <button onclick="show()">Show Camera</button>
 
+
+  
+  <button onclick="show_faces()">Show known faces</button>
+  <br></br>
+  <div id="faces">
+      <img data-src="{{ url_for('known_faces') }}" width="10%" />
+  </div>
+  
+    <br></br>
+    <!-- <h1>Camera</h1> -->
+    <button onclick="show_cam()">Show camera</button>
+    <br></br>
     <div id="cam1" class="class1">
 
         <img data-src="{{ url_for('video') }}" width="50%" />
@@ -17,7 +27,16 @@
 </html>
 
 <script>
-function show() {
+function show_faces() {
+  document.getElementById('faces').style.maxHeight = "200px";
+  var images = document.querySelectorAll("#faces img");
+  for(var i = 0; i < images.length; i++)
+  {
+    images[i].src = images[i].getAttribute('data-src');
+  }
+}
+
+function show_cam() {
   document.getElementById('cam1').style.maxHeight = "200px";
   var images = document.querySelectorAll("#cam1 img");
   for(var i = 0; i < images.length; i++)
