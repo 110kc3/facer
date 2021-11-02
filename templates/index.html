@@ -12,18 +12,14 @@
     <p><input type="submit" value="Submit"></p>
   </form>
 
-  
-  <button onclick="show_faces()">Show known faces</button>
-  <br></br>
-  <div id="faces">
-      <img data-src="{{ url_for('known_faces') }}" width="10%" />
-  </div>
 
-  <!-- {% for known_faces in links %}
-  <img data-src="{{ url_for('known_faces') }}"/>
-  {% endfor %} -->
+  <!-- <button onclick="show_faces()">Show known faces</button> -->
+  <div display: inline-block;>
+  {% for file in files %}
+    <img src="{{ url_for('static', filename=file) }}" style="width: 50px">
+  {% endfor %}
+</div>
 
-  
   
     <br></br>
     <!-- <h1>Camera</h1> -->
@@ -40,26 +36,7 @@
 </html>
 
 <script>
-function show_faces() {
-  const parent = document.getElementById('faces').style.maxHeight = "200px";
-  var images = document.querySelectorAll("#faces img");
 
-  console.log(images)
-  // console.log(images[0])
-  // console.log(images[1])
-  console.log(images.length)
-
-
-
-  images[0].src = images[0].getAttribute('data-src');
-
-  // for(var i = 0; i < images.length; i++)
-  // {
-  //   // images[i].src = images[i].getAttribute('data-src');
-  //   document.body.appendChild(images[i].getAttribute('data-src'))
-
-  // }
-}
 
 function show_cam() {
   document.getElementById('cam1').style.maxHeight = "200px";
