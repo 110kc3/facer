@@ -13,46 +13,52 @@ video_capture = cv2.VideoCapture(0)
 
 
 
-def get_faces(faces_location):
+def get_faces(image_location):
 
     #getting files location
-    path, dirs, files = next(os.walk(faces_location))
-    file_count = len(files)
-    print("Files location: " + str(files))
-    print("file_count : " + str(file_count))
+    # path, dirs, files = next(os.walk(image_location))
+    # file_count = len(files)
+    # print("Files location: " + str(files))
+    # print("file_count : " + str(file_count))
 
-    for face in files:
+    # for file in files:
 
-        face_location = faces_location+face
-        # Load a second sample picture and learn how to recognize it.
-        new_image = face_recognition.load_image_file(face_location)
+    face_location = image_location
+    # Load a sample picture and learn how to recognize it.
+    
+    new_image = face_recognition.load_image_file(face_location)
+    try:
         new_face_encoding = face_recognition.face_encodings(new_image)[0]
-        new_face_location = face_recognition.face_locations(new_image)
+    except:
+        print("no face found")
+        return(0)
+    new_face_location = face_recognition.face_locations(new_image)
 
-        # print("I found {} face(s) in this photograph.".format(len(kamil_face_location)))
+    # print("I found {} face(s) in this photograph.".format(len(kamil_face_location)))
 
-        #Getting location of only 1st found face
-        top, right, bottom, left = new_face_location[0] #<class 'tuple'>
+    #Getting location of only 1st found face
+    top, right, bottom, left = new_face_location[0] #<class 'tuple'>
 
-        # print(type(kamil_face_location[0])) 
+    # print(type(kamil_face_location[0])) 
 
-        #Accessing face itself 
-        # print("A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}".format(top, left, bottom, right))
-        face_image = new_image[top:bottom, left:right]
-        pil_image = Image.fromarray(face_image)
+    #Accessing face itself 
+    # print("A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}".format(top, left, bottom, right))
+    face_image = new_image[top:bottom, left:right]
+    pil_image = Image.fromarray(face_image)
 
-        # print("pil_image is type " + str(type(pil_image)))
+    # print("pil_image is type " + str(type(pil_image)))
 
-        #converting <class 'PIL.Image.Image'> to byte array
-        img_byte_arr = io.BytesIO()
-        pil_image.save(img_byte_arr, format='PNG')
-        img_byte_arr = img_byte_arr.getvalue()
+    # #converting <class 'PIL.Image.Image'> to byte array
+    # img_byte_arr = io.BytesIO()
+    # pil_image.save(img_byte_arr, format='PNG')
+    # img_byte_arr = img_byte_arr.getvalue()
 
-        return(img_byte_arr)
-        # yield(b'--frame\r\n'
-        #             b'Content-Type: image/jpg\r\n\r\n' + img_byte_arr + b'\r\n')
+    return(pil_image)
+    # yield(b'--frame\r\n'
+    #             b'Content-Type: image/jpg\r\n\r\n' + img_byte_arr + b'\r\n')
 
 
+#TODO cleaing and getting face encoding from an image
 # Load a sample picture and learn how to recognize it.
 obama_image = face_recognition.load_image_file("static\\obama.jpg")
 obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
