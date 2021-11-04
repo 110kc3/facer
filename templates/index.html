@@ -13,10 +13,10 @@
   </form>
 
 
-  <!-- <button onclick="show_faces()">Show known faces</button> -->
-  <div display: inline-block;>
+  <button onclick="show_faces()">Show known faces</button>
+  <div id="faces" style="display: none" >
   {% for file in files %}
-    <img src="{{ url_for('static', filename=file) }}" style="width: 50px">
+    <img src="{{ url_for('static', filename=file) }}" style="width: 80px">
   {% endfor %}
 </div>
 
@@ -36,7 +36,14 @@
 </html>
 
 <script>
-
+function show_faces() {
+  var x = document.getElementById("faces");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
 
 function show_cam() {
   document.getElementById('cam1').style.maxHeight = "200px";
