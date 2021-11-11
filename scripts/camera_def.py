@@ -12,7 +12,7 @@ import os #counting number of files in folder
 video_capture = cv2.VideoCapture(0)
 
 
-
+# Metod detecting face in an image and returning image with cutted face only 
 def get_faces(image_location):
 
     #getting files location
@@ -94,7 +94,7 @@ face_names = []
 # # face detection
 # faceDetect = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-
+# Method checking for saved faces in camera output and overlaying with rectangle on face with Name
 def generate_frames():
     # while True:
 

@@ -21,6 +21,7 @@ def index():
 
     return render_template('index.html', files=files)
 
+#Handling file upload, TODO: Submit button without image crashes application
 @application.route('/', methods=['POST'])
 def upload_file():
 
@@ -63,7 +64,6 @@ def upload(filename):
     return send_from_directory(application.config['UPLOAD_PATH'], filename)
 
 @application.route('/video')
-#called in index.html
 def video():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
