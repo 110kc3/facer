@@ -7,7 +7,33 @@ face_detector_only.py uses Stump-based 24x24 discrete adaboost frontal face dete
 haarcascade_frontalface_default.xml file for face detection
 
 
-## Prerequisites for local usage
+## Prerequisites for local usage 
+
+Use Conda - working every time
+
+Instalation:
+
+https://learnopencv.com/install-opencv-3-and-dlib-on-windows-python-only/
+
+Commands:
+
+conda create --name opencv-env-3.6.13 python=3.6.13
+
+conda init powershell (for windows powershell usage)
+
+conda activate opencv-env-3.6.13
+
+pip install -r requirements.txt
+
+python application.py
+
+
+To leave conda virtual environment:
+
+conda deactivate
+
+
+You could also use virtualenv - but it requires Python 3.6.13 exacly 
 
 1. Installing python/pip
 
@@ -44,20 +70,6 @@ Run every time you want to start the server:
 env\scripts\activate
 
 python application.py
-
-
-You could also use Conda for local usage
-
-https://learnopencv.com/install-opencv-3-and-dlib-on-windows-python-only/
-
-conda create --name opencv-env-3.6.13 python=3.6.13
-
-conda activate opencv-env-3.6.13
-
-pip install -r requirements.txt
-
-python application.py
-
 
 
 
