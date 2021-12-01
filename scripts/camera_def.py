@@ -29,6 +29,8 @@ def get_faces(image_location):
     new_image = face_recognition.load_image_file(face_location)
     try:
         new_face_encoding = face_recognition.face_encodings(new_image)[0]
+        print("Printing face encoding\n"+type(new_face_encoding))
+        # print((new_face_encoding))
     except:
         print("no face found")
         return(0)
@@ -60,35 +62,35 @@ def get_faces(image_location):
 
 #TODO cleaing and getting face encoding from an image
 # Load a sample picture and learn how to recognize it.
-obama_image = face_recognition.load_image_file("static\\obama.jpg")
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+# obama_image = face_recognition.load_image_file("static\\obama.jpg")
+# obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
 
-# Load a second sample picture and learn how to recognize it.
-biden_image = face_recognition.load_image_file("static\\biden.jpg")
-biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
+# # Load a second sample picture and learn how to recognize it.
+# biden_image = face_recognition.load_image_file("static\\biden.jpg")
+# biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
 
 
-# Load a second sample picture and learn how to recognize it.
-kamil_image = face_recognition.load_image_file("static\\kamil.jpg")
-kamil_face_encoding = face_recognition.face_encodings(kamil_image)[0]
-kamil_face_location = face_recognition.face_locations(kamil_image)
+# # Load a second sample picture and learn how to recognize it.
+# kamil_image = face_recognition.load_image_file("static\\kamil.jpg")
+# kamil_face_encoding = face_recognition.face_encodings(kamil_image)[0]
+# kamil_face_location = face_recognition.face_locations(kamil_image)
 
-# Create arrays of known face encodings and their names
-known_face_encodings = [
-    obama_face_encoding,
-    biden_face_encoding,
-    kamil_face_encoding
-]
-known_face_names = [
-    "Barack Obama",
-    "Joe Biden",
-    "Kamil"
-]
+# # Create arrays of known face encodings and their names
+# known_face_encodings = [
+#     obama_face_encoding,
+#     biden_face_encoding,
+#     kamil_face_encoding
+# ]
+# known_face_names = [
+#     "Barack Obama",
+#     "Joe Biden",
+#     "Kamil"
+# ]
 
-# Initialize some variables
-face_locations = []
-face_encodings = []
-face_names = []
+# # Initialize some variables
+# face_locations = []
+# face_encodings = []
+# face_names = []
 
 
 # # face detection
