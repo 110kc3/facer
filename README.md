@@ -19,7 +19,7 @@ Commands:
 
 conda create --name opencv-env-3.6.13 python=3.6.13
 
-conda init powershell (for windows powershell usage)
+conda init powershell #(for windows powershell usage)
 
 conda activate opencv-env-3.6.13
 
@@ -88,3 +88,10 @@ pip install https://pypi.python.org/packages/da/06/bd3e241c4eb0a662914b3b4875fc5
 2nd workaround:
 
 Install Python 3.6.13
+
+
+
+To reset the users and images table, run the following python script:
+```
+python init_db.py
+```

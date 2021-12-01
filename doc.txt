@@ -1,3 +1,15 @@
+
+
+image handling:
+https://kezunlin.me/post/1e37a6/
+https://www.titanwolf.org/Network/q/893a1b59-469c-47f1-8723-b5656f202ed6/y
+
+
+
+
+
+
+cognito:
 https://eu-central-1.console.aws.amazon.com/cognito/users/?region=eu-central-1#/pool/eu-central-1_hNoqG8mo2/clients?_k=bqc0yg
 https://api.elephantsql.com/console/4054860b-bcca-4c67-92cf-b8c83f72d9f0/details?
 https://<your_domain>/login?response_type=code&client_id=<your_app_client_id>&redirect_uri=<your_callback_url>
@@ -12,16 +24,3 @@ https://facer.auth.eu-central-1.amazoncognito.com/login?response_type=code&clien
 
 https://facer.auth.eu-central-1.amazoncognito.com/login?response_type=code&client_id=<5rn1ljsch1kuh220mbha6a5san>&redirect_uri=<>
 
-
-
-
-
-https://www.w3schools.com/sql/sql_foreignkey.asp
-
-
-
-
-image db:
-
-imageLocation
-faceEncoding
