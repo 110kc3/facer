@@ -38,6 +38,7 @@ def about():
     """Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
 
+#gets all users that are saved in database and displays them 
 @app.route('/users')
 def show_users():
     users = db.session.query(User).all() # or you could have used User.query.all()
@@ -45,6 +46,7 @@ def show_users():
     print(type(users))
     return render_template('show_users.html', users=users)
 
+#Adding user - currently only specifing username+email - save button just saves user to the database without any validation
 @app.route('/add-user', methods=['POST', 'GET'])
 def add_user():
     user_form = UserForm()
@@ -66,17 +68,19 @@ def add_user():
     flash_errors(user_form)
     return render_template('add_user.html', form=user_form)
 
-
+#Saving images in the program and the database - this also uses scripts/image_handling.py which detects face 
+#TODO: adding images for specific user - maybe diferent folders for each user - user handling
+#TODO: saving face encoding from image_handling.py script
+#TODO: error handling
 @app.route('/add-images', methods=['POST', 'GET'])
 def add_images():
   
     image_form = ImageForm()
 
-    
     if request.method == 'POST':
         for image_to_be_uploaded in request.files.getlist('file'): #holds the submitted file object
 
-            #temporary saving the image in temp_static
+            #temporary saving the image in temp_static - image needs to be processed first
             temp_image_location = os.path.join("app/static/temp", image_to_be_uploaded.filename)
             image_to_be_uploaded.save(temp_image_location)
 
@@ -98,11 +102,14 @@ def add_images():
                             if image_form.validate_on_submit():
                                 # Get validated data from form
                                 name = image_form.name.data # You could also have used request.form['name']
-                                image_location = app.config['UPLOAD_PATH'] # You could also have used request.form['email']
+                             
+                                image_location = app.config['UPLOAD_PATH'] + "/" + image_to_be_uploaded.filename
+                                # image_location = os.path.join(app.config['UPLOAD_PATH'], image_to_be_uploaded.filename)  #propably better but not working with windows
+
                                 print(str(name) + " and " + str(image_location)) 
                                 # save image details to database
                                 try:
-                                    form_to_save = Image(name, image_location, 1) #1 for user id - leaving hadcoded for now TODO
+                                    form_to_save = Image(name, image_location, 1) #1 for user id - leaving hadcoded for now: TODO
                                     db.session.add(form_to_save)
                                     db.session.commit()
                                 except:
@@ -126,6 +133,14 @@ def add_images():
     print("PRINTING FILES LOCATION" + files)
     return render_template('add_images.html',files=files, form=image_form)
 
+#returns all images saved in db - TODO
+@app.route('/images')
+def show_images():
+    images = db.session.query(Image).all() # or you could have used Image.query.all()
+    # images=db.sessio ??? 
+    print(images)
+    print(type(images))
+    return render_template('show_images.html', images=images)
 
 @app.route('/form', methods=['POST'])
 def handle_form():
@@ -137,11 +152,10 @@ def handle_form():
 #displaying image by specifying it's file 
 @app.route('/upload/<path:filename>')
 def upload(filename):
-    # app.config['UPLOAD_PATH']
-    
-    
-    image_dir = os.path.join(os.path.dirname(os.getcwd()),'facer','app','static', 'images')# why it works
-    print(image_dir)
+    # Getting image dir path
+    # print(app.config['UPLOAD_PATH']) - this returns wrong format? app/static/images
+    image_dir = os.path.join(os.path.dirname(os.getcwd()),'facer','app','static', 'images')
+    # print(image_dir) - this returns C:\repos\facer\app\static\images
     return send_from_directory(image_dir, filename)
 
 
