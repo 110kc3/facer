@@ -1,13 +1,9 @@
 # facer
 
-
-
-
 face_detector_only.py uses Stump-based 24x24 discrete adaboost frontal face detector.
 haarcascade_frontalface_default.xml file for face detection
 
-
-## Prerequisites for local usage 
+## Prerequisites for local usage
 
 Use Conda - working every time
 
@@ -25,15 +21,13 @@ conda activate opencv-env-3.6.13
 
 pip install -r requirements.txt
 
-python application.py
-
+python run.py
 
 To leave conda virtual environment:
 
 conda deactivate
 
-
-You could also use virtualenv - but it requires Python 3.6.13 exacly 
+You could also use virtualenv - but it requires Python 3.6.13 exacly
 
 1. Installing python/pip
 
@@ -62,22 +56,19 @@ env\scripts\activate
 
 pip install -r requirements.txt
 
-python application.py
-
+python run.py
 
 Run every time you want to start the server:
 
 env\scripts\activate
 
-python application.py
-
-
+python run.py
 
 ## Noticed errors with instalation - caused by Python version > 3.6
 
 ERROR: CMake must be installed to build dlib
 
-or   ERROR: Failed building wheel for dlib
+or ERROR: Failed building wheel for dlib
 
 1st workaround:
 
@@ -89,9 +80,8 @@ pip install https://pypi.python.org/packages/da/06/bd3e241c4eb0a662914b3b4875fc5
 
 Install Python 3.6.13
 
-
-
 To reset the users and images table, run the following python script:
+
 ```
 python init_db.py
 ```
