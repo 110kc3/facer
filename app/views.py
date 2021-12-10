@@ -82,6 +82,7 @@ def register():
                 return "", 201
             else:
                 return "", 400
+
         except:
             return "", 400
     else:
