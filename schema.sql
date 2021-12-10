@@ -4,8 +4,8 @@ PRAGMA foreign_keys = ON;
 
 CREATE TABLE users (
   user_id integer primary key autoincrement,
-  name string not null,
-  email string not null
+  email string not null,
+  sub string not null
 );
 
 CREATE TABLE images (
