@@ -60,19 +60,20 @@ def show_users():
 
 @app.route('/api/register', methods=['POST'])
 def register():
-    if check_if_valid("register.json", request):
-        request_data = request.get_json()
-        emailAddress = request_data['emailAddress']
-        password = request_data['password']
-        # save user to cognito and then add to database giving his id (sub)
-        try:
+    try:
+        if check_if_valid("register.json", request):
+            request_data = request.get_json()
+            emailAddress = request_data['emailAddress']
+            password = request_data['password']
+            # save user to cognito and then add to database giving his id (sub)
+            
             if(not db.session.query(User).filter_by(
                     email=emailAddress).one_or_none()):
                 response = client.sign_up(
-                    ClientId="6vu0cev9vp78h1stjafjf762b6",
-                    Username=emailAddress,
-                    Password=password,
-                    UserAttributes=[{"Name": "email", "Value": emailAddress}],
+                ClientId="6vu0cev9vp78h1stjafjf762b6",
+                Username=emailAddress,
+                Password=password,
+                UserAttributes=[{"Name": "email", "Value": emailAddress}],
                 )
                 userSub = response["UserSub"]
                 if userSub:
@@ -84,11 +85,10 @@ def register():
                     return "", 400
             else:
                 return "", 400
-        except:
+        else:
             return "", 400
-    else:
+    except:
         return "", 400
-
 
 def check_if_valid(schema_name, request):
     schema = json.load(open(os.path.dirname(
