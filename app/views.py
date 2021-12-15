@@ -66,23 +66,24 @@ def register():
         password = request_data['password']
         # save user to cognito and then add to database giving his id (sub)
         try:
-            db.session.query(User).filter_by(
-                email=emailAddress).one()
-            response = client.sign_up(
-                ClientId="6vu0cev9vp78h1stjafjf762b6",
-                Username=emailAddress,
-                Password=password,
-                UserAttributes=[{"Name": "email", "Value": emailAddress}],
-            )
-            userSub = response["UserSub"]
-            if userSub:
-                newUser = User(emailAddress, userSub)
-                db.session.add(newUser)
-                db.session.commit()
-                return "", 201
+            if(not db.session.query(User).filter_by(
+                    email=emailAddress).one_or_none()):
+                response = client.sign_up(
+                    ClientId="6vu0cev9vp78h1stjafjf762b6",
+                    Username=emailAddress,
+                    Password=password,
+                    UserAttributes=[{"Name": "email", "Value": emailAddress}],
+                )
+                userSub = response["UserSub"]
+                if userSub:
+                    newUser = User(emailAddress, userSub)
+                    db.session.add(newUser)
+                    db.session.commit()
+                    return "", 201
+                else:
+                    return "", 400
             else:
                 return "", 400
-
         except:
             return "", 400
     else:
