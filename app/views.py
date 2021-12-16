@@ -13,11 +13,15 @@ from os import abort
 
 from jsonschema import validate, Draft3Validator
 from app.scripts.image_handling import validate_image, get_faces
+from sqlalchemy.orm import sessionmaker
 
 import os
 import json
 import boto3
-
+from sqlalchemy import create_engine
+engine = create_engine('postgresql+psycopg2://sqgspjyu:LNOQ-mDRqHuUVaHyAo-OU15QYm7ryT08@tyke.db.elephantsql.com/sqgspjyu')
+Session = sessionmaker(bind=engine)
+session = Session()
 
 # app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
@@ -67,7 +71,7 @@ def register():
             password = request_data['password']
             # save user to cognito and then add to database giving his id (sub)
             
-            if(not db.session.query(User).filter_by(
+            if(not session.query(User).filter_by(
                     email=emailAddress).one_or_none()):
                 response = client.sign_up(
                 ClientId="6vu0cev9vp78h1stjafjf762b6",
@@ -78,8 +82,8 @@ def register():
                 userSub = response["UserSub"]
                 if userSub:
                     newUser = User(emailAddress, userSub)
-                    db.session.add(newUser)
-                    db.session.commit()
+                    session.add(newUser)
+                    session.commit()
                     return "", 201
                 else:
                     return "", 400
@@ -87,7 +91,8 @@ def register():
                 return "", 400
         else:
             return "", 400
-    except:
+    except Exception as i:
+        print(i)
         return "", 400
 
 def check_if_valid(schema_name, request):
