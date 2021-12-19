@@ -27,7 +27,8 @@ session = Session()
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 app.config['UPLOAD_PATH'] = 'app/static/images'
 
-client = boto3.client("cognito-idp", region_name="eu-central-1")
+client = boto3.client("cognito-idp", region_name="eu-central-1", aws_access_key_id="AWS_ACCESS_KEY_ID",
+                   aws_secret_access_key="AWS_SECRET_ACCESS_KEY")
 
 
 # The below code, will do the sign-up
