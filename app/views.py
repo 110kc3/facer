@@ -5,7 +5,7 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
-from app import app, db
+from app import app
 from flask import render_template, request, redirect, url_for, flash, send_from_directory
 from app.forms import ImageForm
 from app.models import User, Image
@@ -13,19 +13,18 @@ from os import abort
 
 from jsonschema import validate, Draft3Validator
 from app.scripts.image_handling import validate_image, get_faces
-from sqlalchemy.orm import sessionmaker
+from app import database
 
 import os
 import json
 import boto3
-from sqlalchemy import create_engine
-engine = create_engine('postgresql+psycopg2://sqgspjyu:LNOQ-mDRqHuUVaHyAo-OU15QYm7ryT08@tyke.db.elephantsql.com/sqgspjyu')
-Session = sessionmaker(bind=engine)
-session = Session()
+
+
 
 # app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 app.config['UPLOAD_PATH'] = 'app/static/images'
+session = database.session
 
 client = boto3.client("cognito-idp", region_name="eu-central-1", aws_access_key_id="AWS_ACCESS_KEY_ID",
                    aws_secret_access_key="AWS_SECRET_ACCESS_KEY")
@@ -55,7 +54,7 @@ def about():
 @app.route('/users')
 def show_users():
     # or you could have used User.query.all()
-    users = db.session.query(User).all()
+    users = session.session.query(User).all()
     print(users)
     print(type(users))
     return render_template('show_users.html', users=users)
@@ -154,10 +153,10 @@ def add_images():
                                     # 1 for user id - leaving hadcoded for now: TODO
                                     form_to_save = Image(
                                         name, image_location, 1)
-                                    db.session.add(form_to_save)
-                                    db.session.commit()
+                                    session.session.add(form_to_save)
+                                    session.session.commit()
                                 except:
-                                    print("error saving image to db")
+                                    print("error saving image to session")
                                 try:
                                     cutted_face.save(os.path.join(
                                         app.config['UPLOAD_PATH'], image_to_be_uploaded.filename))
@@ -180,14 +179,14 @@ def add_images():
     print("PRINTING FILES LOCATION" + files)
     return render_template('add_images.html', files=files, form=image_form)
 
-# returns all images saved in db - TODO
+# returns all images saved in session - TODO
 
 
 @app.route('/images')
 def show_images():
     # or you could have used Image.query.all()
-    images = db.session.query(Image).all()
-    # images=db.sessio ???
+    images = session.session.query(Image).all()
+    # images=session.sessio ???
     print(images)
     print(type(images))
     return render_template('show_images.html', images=images)
