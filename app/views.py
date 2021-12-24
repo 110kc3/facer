@@ -5,7 +5,7 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
-from app import app
+from app import app, verify_token
 from flask import render_template, request, redirect, url_for, flash, send_from_directory
 from app.forms import ImageForm
 from app.models import User, Image
@@ -20,23 +20,24 @@ import json
 import boto3
 
 
-
 # app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 app.config['UPLOAD_PATH'] = 'app/static/images'
 session = database.session
 
 client = boto3.client("cognito-idp", region_name="eu-central-1", aws_access_key_id="AWS_ACCESS_KEY_ID",
-                   aws_secret_access_key="AWS_SECRET_ACCESS_KEY")
+                      aws_secret_access_key="AWS_SECRET_ACCESS_KEY")
 
 
 # The below code, will do the sign-up
-
 # to delete
+
+
 @app.route('/')
 def home():
-    """Render website's home page."""
-    return render_template('home.html')
+    token = "token token token.sadsadsadsada.aFIn2xj3D-asdsadsd-XjomasEWSh3FMsCv9_rDARz1qphrYAjrLtOT0ZGvf4FtGT9EGGTrHqy2Yf2UP3vSWZxy4j3BdNWkK9w1MN5E6yK7sp5lFWqwOw1O2subiNIAYuFEgs6NDmji42baTlKJwcxG-HjPZjlm5y2kL9kE72PnbECD8cQYUo2wIgLt11ifsj7WRFTc_hlQXmdxJxmS6-7HVZ3jmAhZSCdqn1kMSdjRgC48czUAxrfnFGpm5cIiNkENGddqGrp3nP2wCBAIIW27cZu5Wp1rIlYTs8sF2bGzTB02REdaQ5dCtYuy7pg"
+# example on how to verify token
+    return verify_token.verify_token_signature(token)
 
 # to delete
 
@@ -70,14 +71,14 @@ def register():
             emailAddress = request_data['emailAddress']
             password = request_data['password']
             # save user to cognito and then add to database giving his id (sub)
-            
+
             if(not session.query(User).filter_by(
                     email=emailAddress).one_or_none()):
                 response = client.sign_up(
-                ClientId="6vu0cev9vp78h1stjafjf762b6",
-                Username=emailAddress,
-                Password=password,
-                UserAttributes=[{"Name": "email", "Value": emailAddress}],
+                    ClientId="6vu0cev9vp78h1stjafjf762b6",
+                    Username=emailAddress,
+                    Password=password,
+                    UserAttributes=[{"Name": "email", "Value": emailAddress}],
                 )
                 userSub = response["UserSub"]
                 if userSub:
@@ -94,6 +95,7 @@ def register():
     except Exception as i:
         print(i)
         return "", 400
+
 
 def check_if_valid(schema_name, request):
     schema = json.load(open(os.path.dirname(

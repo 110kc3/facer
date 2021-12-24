@@ -29,5 +29,7 @@ typing-extensions==3.10.0.2
 Werkzeug>=2.0
 wincertstore==0.2
 zipp==3.6.0
-python-dotenv
+python-dotenv==0.19.2
+psycopg2==2.9.2
+pyjwt==2.3.0
 # flask-cognito-auth
