@@ -18,11 +18,14 @@ def upload_file(file_name):
     """
     Function to upload a file to an S3 bucket
     """
-    object_name = file_name
-    response = boto3_s3_resource.upload_file(
-        file_name, bucket_name, object_name)
-
-    return response
+    try:
+        object_name = file_name
+        response = boto3_s3_resource.upload_file(
+            file_name, bucket_name, object_name)
+        return response
+    except:
+        raise ValueError(
+            '{"code": 400, "message": "Could not add an image to s3 bucket"}')
 
 
 def download_file(file_name):
