@@ -5,3 +5,5 @@
 !.elasticbeanstalk/*.global.yml
 app/__pycache__
 app/scripts/__pycache__
+.env
+testing_files/
