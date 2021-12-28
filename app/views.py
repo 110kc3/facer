@@ -5,23 +5,19 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
-from app import app, verify_token
 from flask import render_template, request, redirect, url_for, flash, send_from_directory
+from app import app, verify_token
 from app.forms import ImageForm
 from app.models import User, Image
+from app.database import session
+from app.boto3_service import boto3_client
 from os import abort
 
 from jsonschema import validate, Draft3Validator
 from app.scripts.image_handling import validate_image, get_faces
-from app import database
-from app import boto3_service
 
 import os
 import json
-
-session = database.session
-
-boto3_client = boto3_service.boto3_client
 
 
 @app.route('/')
