@@ -16,7 +16,8 @@ class User(db.Model):
         self.email = email
 
     def __repr__(self):
-        return '<User %r>' % self.email
+        return "<User(id='%s', email='%s', sub='%s')>" % (
+            self.user_id, self.email, self.sub)
 
 
 class Image(db.Model):

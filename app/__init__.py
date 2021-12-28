@@ -14,3 +14,5 @@ app.config['UPLOAD_PATH'] = 'app/static/images'
 db = SQLAlchemy(app)
 
 app.config.from_object(__name__)
+
+from app import views # important to retrieve routes despite not being strictly used, must be in last line, otherwise routes will not be retrieved     
