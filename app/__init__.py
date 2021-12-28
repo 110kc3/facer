@@ -8,7 +8,9 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'super secret key'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_BINDS'] = ""
+# app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
+app.config['UPLOAD_PATH'] = 'app/static/images'
 db = SQLAlchemy(app)
 
 app.config.from_object(__name__)
-from app import views

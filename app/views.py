@@ -5,32 +5,19 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
-from app import app, verify_token
 from flask import render_template, request, redirect, url_for, flash, send_from_directory
+from app import app, verify_token
 from app.forms import ImageForm
 from app.models import User, Image
+from app.database import session
+from app.boto3_service import boto3_client
 from os import abort
 
 from jsonschema import validate, Draft3Validator
 from app.scripts.image_handling import validate_image, get_faces
-from app import database
 
 import os
 import json
-import boto3
-
-
-# app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
-app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
-app.config['UPLOAD_PATH'] = 'app/static/images'
-session = database.session
-
-client = boto3.client("cognito-idp", region_name="eu-central-1", aws_access_key_id="AWS_ACCESS_KEY_ID",
-                      aws_secret_access_key="AWS_SECRET_ACCESS_KEY")
-
-
-# The below code, will do the sign-up
-# to delete
 
 
 @app.route('/')
@@ -39,19 +26,10 @@ def home():
 # example on how to verify token
     return verify_token.verify_token_signature(token)
 
-# to delete
-
-
-@app.route('/about/')
-def about():
-    """Render the website's about page."""
-    return render_template('about.html', name="Mary Jane")
 
 # gets all users that are saved in database and displays them
 
 # maybe not to delete but refactor required, in REST api you do not return an html page, REST API is stateless
-
-
 @app.route('/users')
 def show_users():
     # or you could have used User.query.all()
@@ -74,7 +52,7 @@ def register():
 
             if(not session.query(User).filter_by(
                     email=emailAddress).one_or_none()):
-                response = client.sign_up(
+                response = boto3_client.sign_up(
                     ClientId="6vu0cev9vp78h1stjafjf762b6",
                     Username=emailAddress,
                     Password=password,
@@ -194,13 +172,6 @@ def show_images():
     return render_template('show_images.html', images=images)
 
 
-@app.route('/form', methods=['POST'])
-def handle_form():
-    title = request.form.get('title')
-    description = request.form.get('description')
-    return 'file uploaded and form submit<br>title: %s<br> description: %s' % (title, description)
-
-
 # displaying image by specifying it's file
 @app.route('/upload/<path:filename>')
 def upload(filename):
@@ -226,8 +197,7 @@ def flash_errors(form):
 
 @app.errorhandler(404)
 def page_not_found(error):
-    """Custom 404 page."""
-    return render_template('404.html'), 404
+    return error, 404
 
 
 if __name__ == '__main__':

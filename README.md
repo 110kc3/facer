@@ -7,21 +7,23 @@ haarcascade_frontalface_default.xml file for face detection
 
 Use Conda - working every time
 
-Instalation:
+Installation:
 
 https://learnopencv.com/install-opencv-3-and-dlib-on-windows-python-only/
 
 Commands:
 
-conda create --name opencv-env-3.6.13 python=3.6.13
+1. conda create --name opencv-env-3.6.13 python=3.6.13
 
-conda init powershell #(for windows powershell usage)
+2. conda init powershell #(for windows powershell usage)
 
-conda activate opencv-env-3.6.13
+3. conda activate opencv-env-3.6.13
 
-pip install -r requirements.txt
+4. pip install -r requirements.txt
 
-python run.py
+5. python run.py
+
+if any of the packages is missing install it using "pip install <missing_package_name_from_error_message>
 
 To leave conda virtual environment:
 
