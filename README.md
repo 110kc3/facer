@@ -3,6 +3,13 @@
 face_detector_only.py uses Stump-based 24x24 discrete adaboost frontal face detector.
 haarcascade_frontalface_default.xml file for face detection
 
+## 
+
+Download jwt token
+
+https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_hNoqG8mo2/.well-known/jwks.json
+
+
 ## Prerequisites for local usage
 
 Use Conda - working every time

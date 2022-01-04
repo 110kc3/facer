@@ -1,7 +1,5 @@
 
 
-
-
 certifi==2020.12.5
 click==8.0.3
 cmake==3.21.4
@@ -31,5 +29,8 @@ wincertstore==0.2
 zipp==3.6.0
 python-dotenv==0.19.2
 psycopg2==2.9.2
-pyjwt==2.3.0
-# flask-cognito-auth
+PyJWT==2.3.0
+
+jsonschema==3.2.0
+boto3>=1.20
+uuid==1.30
