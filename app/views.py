@@ -10,7 +10,7 @@ from app import app
 from app.forms import ImageForm
 from app.models import User, Image
 from app.database import session
-from app.boto3_service import boto3_aws_client, boto3_s3_resource, upload_file
+from app.boto3_service import boto3_aws_client, boto3_s3_bucket, upload_file
 from os import abort
 from app.utils.get_auth_header import get_auth_header
 from app.utils.http_error_handler import http_error_handler
@@ -20,8 +20,9 @@ from app.scripts.image_handling import validate_image, get_faces
 
 import os
 import json
+import cv2
 
-IMAGE_PER_USER_LIMIT = 3
+IMAGE_PER_USER_LIMIT = 99
 
 """ @app.route('/test')
 def home():
@@ -90,10 +91,19 @@ def register():
 def add_user_image():
     try:
         token = get_auth_header(request.headers)
-        file = request.files['image']
+        file = request.files['image'] #print => <FileStorage: 'pudzian.jpg' ('image/jpeg')>; type => <class 'werkzeug.datastructures.FileStorage'>
         if(not file):
             raise ValueError(
                 '{"code": 400, "message": "No image was delivered"}')
+   
+        # Cutting face from the image
+        [cutted_face, encoding] = get_faces(file)
+  
+        if(not cutted_face):
+            raise ValueError(
+                '{"code": 400, "message": "No face found in image"}')
+        # cutted_face.save(os.path.join(app.config['UPLOAD_PATH'], "filename.png"))
+
 
         user = session.query(User).filter_by(
             sub=token["sub"]).first()
@@ -109,11 +119,9 @@ def add_user_image():
             raise ValueError(
                 '{"code": 400, "message": "Limit of images per user exceeded"}')
 
-        # TODO: Add image to s3, firstly crop it to proper size using already implemented scripts, then create an entry in database using received file name and user sub
-        # newImage = Image("testing_files/biden.jpg") #(name, image_location, owner_id)
-
-        
-        file_name = upload_file(file)
+        # TODO: create an entry in database using received file name and user sub (change db)
+ 
+        file_name = upload_file(cutted_face)
      
         new_image = Image(file_name, user.user_id)
         session.add(new_image)
