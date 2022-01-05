@@ -113,11 +113,8 @@ def add_user_image():
                 '{"code": 400, "message": "Limit of images per user exceeded"}')
 
          # Cutting face from the image
-        [cutted_face, encoding] = get_faces(file)
+        [cutted_face] = get_faces(file)
 
-        if(not cutted_face):
-            raise ValueError(
-                '{"code": 400, "message": "No face found in image"}')
         # cutted_face.save(os.path.join(app.config['UPLOAD_PATH'], "filename.png"))
 
         file_name = upload_file(cutted_face)
