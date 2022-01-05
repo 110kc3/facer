@@ -91,19 +91,12 @@ def register():
 def add_user_image():
     try:
         token = get_auth_header(request.headers)
-        file = request.files['image'] #print => <FileStorage: 'pudzian.jpg' ('image/jpeg')>; type => <class 'werkzeug.datastructures.FileStorage'>
-        if(not file):
+        # print => <FileStorage: 'pudzian.jpg' ('image/jpeg')>; type => <class 'werkzeug.datastructures.FileStorage'>
+        file = request.files['image']
+        name = request.form['name']
+        if(not file or not name):
             raise ValueError(
-                '{"code": 400, "message": "No image was delivered"}')
-   
-        # Cutting face from the image
-        [cutted_face, encoding] = get_faces(file)
-  
-        if(not cutted_face):
-            raise ValueError(
-                '{"code": 400, "message": "No face found in image"}')
-        # cutted_face.save(os.path.join(app.config['UPLOAD_PATH'], "filename.png"))
-
+                '{"code": 400, "message": "No image or name was delivered"}')
 
         user = session.query(User).filter_by(
             sub=token["sub"]).first()
@@ -119,15 +112,19 @@ def add_user_image():
             raise ValueError(
                 '{"code": 400, "message": "Limit of images per user exceeded"}')
 
-        # TODO: create an entry in database using received file name and user sub (change db)
- 
+         # Cutting face from the image
+        [cutted_face, encoding] = get_faces(file)
+
+        if(not cutted_face):
+            raise ValueError(
+                '{"code": 400, "message": "No face found in image"}')
+        # cutted_face.save(os.path.join(app.config['UPLOAD_PATH'], "filename.png"))
+
         file_name = upload_file(cutted_face)
-     
-        new_image = Image(file_name, user.user_id)
+
+        new_image = Image(name, file_name, user.user_id)
         session.add(new_image)
         session.commit()
-   
-       
 
         return "", 200
     except Exception as i:

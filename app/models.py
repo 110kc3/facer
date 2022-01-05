@@ -24,10 +24,12 @@ class Image(db.Model):
     __tablename__ = 'images'
     image_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
+    filename = db.Column(db.String(255), unique=True)
     owner_id = db.Column(db.Integer, ForeignKey('users.user_id'))
 
-    def __init__(self, name, owner_id):
+    def __init__(self, name, filename, owner_id):
         self.name = name
+        self.filename = filename
         self.owner_id = owner_id
 
     def __repr__(self):
