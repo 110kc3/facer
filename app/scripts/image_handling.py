@@ -11,7 +11,7 @@ import numpy as np
 from PIL import Image  # cutting face from an image
 import io  # converting <class 'PIL.Image.Image'> to byte array
 import os  # counting number of files in folder
-
+import pickle # converting numpy.ndarray to bytea (binary)
 
 def validate_image(stream):
     header = stream.read(512)
@@ -57,6 +57,9 @@ def get_faces(image_location):
         pil_image.save(img_byte_arr, format='PNG')
         # save function uses the pointer to iterate through the file. When it reaches the end it does not reset the pointer to the beginning
         img_byte_arr.seek(0)
+
+        # may be required later when retriving encoding from DB
+        # pickle_string = pickle.dumps(new_face_encoding)
 
         return(img_byte_arr, new_face_encoding)
     except:

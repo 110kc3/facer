@@ -17,11 +17,9 @@ from app.utils.http_error_handler import http_error_handler
 from app.utils.check_if_valid_schema import check_if_valid_schema
 
 from app.scripts.image_handling import validate_image, get_faces
-
 import os
 import json
 import cv2
-
 IMAGE_PER_USER_LIMIT = 99
 
 """ @app.route('/test')
@@ -44,8 +42,6 @@ def show_users():
     print(users)
     print(type(users))
     return render_template('show_users.html', users=users)
-
-# base on that endpoint, during POST  method you mostly send only codes with empty body (error in body if 400+, but we currently do not have error handler)
 
 
 @app.route('/api/register', methods=['POST'])
@@ -82,10 +78,7 @@ def register():
 
 
 # Saving images in the program and the database - this also uses scripts/image_handling.py which detects face
-# TODO: adding images for specific user - maybe diferent folders for each user - user handling (note: preferably save them in aws s3)
-# TODO: saving face encoding from image_handling.py script
-# TODO: error handling
-
+# TODO: getting face encoding https://stackoverflow.com/questions/57642165/saving-python-object-in-postgres-table-with-pickle/57644761#57644761
 
 @app.route("/api/image",  methods=['POST'])
 def add_user_image():
@@ -113,13 +106,13 @@ def add_user_image():
                 '{"code": 400, "message": "Limit of images per user exceeded"}')
 
          # Cutting face from the image
-        [cutted_face] = get_faces(file)
-
+        [cutted_face, encoding] = get_faces(file)
+        # print("After conversion: \n" + str(encoding)  + str(type(encoding)))
         # cutted_face.save(os.path.join(app.config['UPLOAD_PATH'], "filename.png"))
 
         file_name = upload_file(cutted_face)
 
-        new_image = Image(name, file_name, user.user_id)
+        new_image = Image(name, file_name, encoding, user.user_id)
         session.add(new_image)
         session.commit()
 
@@ -128,81 +121,8 @@ def add_user_image():
         return http_error_handler(i)
 
 
-@ app.route('/add-images', methods=['POST', 'GET'])
-def add_images():
-
-    image_form = ImageForm()
-
-    if request.method == 'POST':
-        # holds the submitted file object
-        for image_to_be_uploaded in request.files.getlist('file'):
-
-            # temporary saving the image in temp_static - image needs to be processed first
-            temp_image_location = os.path.join(
-                "app/static/temp", image_to_be_uploaded.filename)
-            image_to_be_uploaded.save(temp_image_location)
-
-            if image_to_be_uploaded.filename != '':
-                file_ext = os.path.splitext(image_to_be_uploaded.filename)[1]
-                # checking the file extension
-                if file_ext not in app.config['UPLOAD_EXTENSIONS']:
-                    abort(400)  # 400 error if wrong extension
-                else:
-                    # image_to_be_uploaded.save(os.path.join('static/', current_user.get_id())) #TODO creating folder for each user
-                    # image_to_be_uploaded.save(os.path.join('static/', image_to_be_uploaded.filename)) #saving in static folder
-
-                    # face_only = get_faces(image_to_be_uploaded)
-                    # print("printing image type")
-                    # print(type(image_to_be_uploaded)) #<class 'werkzeug.datastructures.FileStorage'>
-                    # print(image_to_be_uploaded) #<FileStorage: 'seth.jpg' ('image/jpeg')>
-                    try:
-                        [cutted_face, encoding] = get_faces(
-                            temp_image_location)
-                        if request.method == 'POST':
-                            if image_form.validate_on_submit():
-                                # Get validated data from form
-                                # You could also have used request.form['name']
-                                name = image_form.name.data
-
-                                image_location = app.config['UPLOAD_PATH'] + \
-                                    "/" + image_to_be_uploaded.filename
-                                # image_location = os.path.join(app.config['UPLOAD_PATH'], image_to_be_uploaded.filename)  #propably better but not working with windows
-
-                                print(str(name) + " and " +
-                                      str(image_location))
-                                # save image details to database
-                                try:
-                                    # 1 for user id - leaving hadcoded for now: TODO
-                                    form_to_save = Image(
-                                        name, image_location, 1)
-                                    session.session.add(form_to_save)
-                                    session.session.commit()
-                                except:
-                                    print("error saving image to session")
-                                try:
-                                    cutted_face.save(os.path.join(
-                                        app.config['UPLOAD_PATH'], image_to_be_uploaded.filename))
-                                    os.remove(temp_image_location)
-                                    flash_errors(image_form)
-                                    flash('image successfully added')
-                                    return redirect(url_for('add_images'))
-                                except:
-                                    print("error saving image in folder")
-
-                    except:
-                        print("no face found")
-                        os.remove(temp_image_location)
-
-                # return redirect(url_for('show_users'))
-    # TODO fix - images are not showing on site - path problem
-    files = os.path.join(os.path.dirname(os.getcwd()),
-                         'facer', 'app', 'static', 'images')
-    # files = os.path.join(os.path.dirname(os.getcwd()), 'flask-sqlite-master','app','static', 'images')
-    print("PRINTING FILES LOCATION" + files)
-    return render_template('add_images.html', files=files, form=image_form)
 
 # returns all images saved in session - TODO
-
 
 @app.route('/images')
 def show_images():
