@@ -55,7 +55,7 @@ def read_image_from_s3(key):
         Image array
     """
     s3 = boto3_s3_bucket_resource
-    bucket = s3.Bucket("tai-bucket-aws-photos")
+    bucket = s3.Bucket(bucket_name)
     object = bucket.Object(key)
     response = object.get()
     file_stream = response['Body']
@@ -67,16 +67,6 @@ def read_image_from_s3(key):
  
     return img_str
 
-
-def download_file(file_name):
-    """
-    Function to download a given file from an S3 bucket
-    """
-    s3 = boto3.resource('s3')
-    output = f"downloads/{file_name}"
-    s3.Bucket(bucket_name).download_file(file_name, output)
-
-    return output
 
 
 def list_files():

@@ -5,44 +5,20 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
-from flask import render_template, request, redirect, url_for, flash, send_from_directory
+from flask import request, send_from_directory
 from app import app
-from app.forms import ImageForm
 from app.models import User, Image
 from app.database import session
-from app.boto3_service import boto3_aws_client, boto3_s3_bucket, upload_file, read_image_from_s3
-from os import abort
+from app.boto3_service import boto3_aws_client, upload_file, read_image_from_s3
 from app.utils.get_auth_header import get_auth_header
 from app.utils.http_error_handler import http_error_handler
 from app.utils.check_if_valid_schema import check_if_valid_schema
 
 from app.scripts.image_handling import validate_image, get_faces
 import os
-import json
-import cv2
+
+
 IMAGE_PER_USER_LIMIT = 99
-
-""" @app.route('/test')
-def home():
-    boto3_s3_resource.create_bucket(Bucket="tai-bucket-aws-photos",
-                                    CreateBucketConfiguration={
-                                        'LocationConstraint': 'eu-central-1'})
-    token = "token token token.sadsadsadsada.aFIn2xj3D-asdsadsd-XjomasEWSh3FMsCv9_rDARz1qphrYAjrLtOT0ZGvf4FtGT9EGGTrHqy2Yf2UP3vSWZxy4j3BdNWkK9w1MN5E6yK7sp5lFWqwOw1O2subiNIAYuFEgs6NDmji42baTlKJwcxG-HjPZjlm5y2kL9kE72PnbECD8cQYUo2wIgLt11ifsj7WRFTc_hlQXmdxJxmS6-7HVZ3jmAhZSCdqn1kMSdjRgC48czUAxrfnFGpm5cIiNkENGddqGrp3nP2wCBAIIW27cZu5Wp1rIlYTs8sF2bGzTB02REdaQ5dCtYuy7pg"
-# example on how to verify token
-    return verify_token.verify_token_signature(token) """
-
-
-# gets all users that are saved in database and displays them
-
-# maybe not to delete but refactor required, in REST api you do not return an html page, REST API is stateless
-@app.route('/users')
-def show_users():
-    # or you could have used User.query.all()
-    users = session.session.query(User).all()
-    print(users)
-    print(type(users))
-    return render_template('show_users.html', users=users)
-
 
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -139,22 +115,6 @@ def upload(filename):
     # print(image_dir) - this returns C:\repos\facer\app\static\images
     return send_from_directory(image_dir, filename)
 
-
-# Flash errors from the form if validation fails
-def flash_errors(form):
-    for field, errors in form.errors.items():
-        for error in errors:
-            flash(u"Error in the %s field - %s" % (
-                getattr(form, field).label.text,
-                error
-            ))
-
-
-# Error handlers
-
-@app.errorhandler(404)
-def page_not_found(error):
-    return error, 404
 
 
 if __name__ == '__main__':
