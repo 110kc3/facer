@@ -10,7 +10,7 @@ from app import app
 from app.forms import ImageForm
 from app.models import User, Image
 from app.database import session
-from app.boto3_service import boto3_aws_client, boto3_s3_bucket, upload_file
+from app.boto3_service import boto3_aws_client, boto3_s3_bucket, upload_file, read_image_from_s3
 from os import abort
 from app.utils.get_auth_header import get_auth_header
 from app.utils.http_error_handler import http_error_handler
@@ -122,16 +122,11 @@ def add_user_image():
 
 
 
-# returns all images saved in session - TODO
-
-@app.route('/images')
-def show_images():
-    # or you could have used Image.query.all()
-    images = session.session.query(Image).all()
-    # images=session.sessio ???
-    print(images)
-    print(type(images))
-    return render_template('show_images.html', images=images)
+# returns image (<class 'numpy.ndarray'>) when providing image key (same as image filename - column in DB)
+@app.route('/api/image/<id>')
+def get_face_image(id):
+    image = read_image_from_s3(str(id))
+    return image
 
 
 # displaying image by specifying it's file

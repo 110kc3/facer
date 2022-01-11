@@ -3,6 +3,12 @@ import os
 import boto3
 import uuid
 
+
+from PIL import Image
+from io import BytesIO
+import numpy as np
+
+
 load_dotenv()
 aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
 aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
@@ -14,6 +20,9 @@ boto3_aws_client = boto3.client("cognito-idp", region_name="eu-central-1", aws_a
 boto3_s3_bucket = boto3.client("s3", region_name="eu-central-1", aws_access_key_id=aws_access_key_id,
                                    aws_secret_access_key=aws_secret_access_key)
 
+    
+boto3_s3_bucket_resource = boto3.resource("s3", region_name="eu-central-1", aws_access_key_id=aws_access_key_id,
+                                   aws_secret_access_key=aws_secret_access_key)
 
 def upload_file(file):
     """
@@ -28,6 +37,30 @@ def upload_file(file):
         raise ValueError(
             '{"code": 400, "message": "Could not add an image to s3 bucket"}')
 
+
+
+def read_image_from_s3(key):
+    """Load image file from s3.
+
+    Parameters
+    ----------
+    bucket: string
+        Bucket name
+    key : string
+        Path in s3
+
+    Returns
+    -------
+    np array
+        Image array
+    """
+    s3 = boto3_s3_bucket_resource
+    bucket = s3.Bucket("tai-bucket-aws-photos")
+    object = bucket.Object(key)
+    response = object.get()
+    file_stream = response['Body']
+    im = Image.open(file_stream)
+    return np.array(im)
 
 
 def download_file(file_name):
