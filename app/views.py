@@ -122,7 +122,7 @@ def add_user_image():
 
 
 
-# returns image (<class 'numpy.ndarray'>) when providing image key (same as image filename - column in DB)
+# returns image (<class 'bytes'>) when providing image key (same as image filename - column in DB)
 @app.route('/api/image/<id>')
 def get_face_image(id):
     image = read_image_from_s3(str(id))

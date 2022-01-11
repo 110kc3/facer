@@ -7,7 +7,7 @@ import uuid
 from PIL import Image
 from io import BytesIO
 import numpy as np
-
+import base64
 
 load_dotenv()
 aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
@@ -59,8 +59,13 @@ def read_image_from_s3(key):
     object = bucket.Object(key)
     response = object.get()
     file_stream = response['Body']
-    im = Image.open(file_stream)
-    return np.array(im)
+    image = Image.open(file_stream)
+    #Converting PIL Image.image object to base64 string
+    buffered = BytesIO()
+    image.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue())
+ 
+    return img_str
 
 
 def download_file(file_name):
