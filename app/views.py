@@ -14,7 +14,7 @@ from app.utils.get_auth_header import get_auth_header
 from app.utils.http_error_handler import http_error_handler
 from app.utils.check_if_valid_schema import check_if_valid_schema
 
-from app.scripts.image_handling import validate_image, get_faces, load_image
+from app.scripts.image_handling import validate_image, get_faces, load_encoding, recognise
 import os
 import face_recognition
 import numpy as np
@@ -123,27 +123,23 @@ def detect_face():
                 '{"code": 400, "message": "No such user found in db"}')
         
         #getting only our user images
-        images = session.query(Image).filter_by(
+        images = session.query(Image).filter_by( #images <class 'list'>[<Image with face 'Obama'>, <
             owner_id=user.user_id).all()
         if(not images):
             raise ValueError(
                 '{"code": 400, "message": "No images to compare to"}')
 
-        
-        unknown_image = face_recognition.load_image_file(file_to_verify)
-        unknown_encoding  = face_recognition.face_encodings(unknown_image)[0] #class 'numpy.ndarray'> - first detected face 
- 
-        for image in images:
-            known_encoding = load_image(image.encoding)
 
-            # print("Printing unknown_encoding "  + str(type(unknown_encoding))+str(unknown_encoding) + str(unknown_encoding.ndim) + str(unknown_encoding.shape) + str(unknown_encoding.size)+ str(len(unknown_encoding)))
-            # print("Printing known_encoding " + str(type(known_encoding))+str(known_encoding) + str(known_encoding.ndim) + str(known_encoding.shape) + str(known_encoding.size)+ str(len(known_encoding))) #
-            
-            results = face_recognition.compare_faces([known_encoding], unknown_encoding)
-            print("Face with name " + str(image.name) + " is similar to uploaded face: "+str(results))
+        found_names = []
+        found_faces = []
+    
+        found_names, found_faces = recognise(images, file_to_verify)
+       
+        print("found_names " + str(found_names) + " \n found_faces: "+str(found_faces))
 
 
-        return "", 200
+        data = {'found_names': found_names, 'found_faces': found_faces}
+        return data, 200
     except Exception as i:
         return http_error_handler(i)
 

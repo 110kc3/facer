@@ -1,5 +1,6 @@
 import imghdr
 import os
+from tkinter.ttk import Separator
 from flask import Flask, render_template, request, redirect, url_for, abort, \
     send_from_directory
 from werkzeug.utils import secure_filename
@@ -12,6 +13,9 @@ from PIL import Image  # cutting face from an image
 import io  # converting <class 'PIL.Image.Image'> to byte array
 import os  # counting number of files in folder
 import pickle # converting numpy.ndarray to bytea (binary)
+
+from app.models import User, Image
+from app.database import session
 
 def validate_image(stream):
     header = stream.read(512)
@@ -65,8 +69,79 @@ def get_faces(image_location):
     except:
         raise
 
+#returning list of faces locations
+def get_all_faces_locations(image):
+    try:
+        # Load picture and learn how to recognize it.
+        image = face_recognition.load_image_file(image)  # type <class 'numpy.ndarray'>
 
-def load_image(pickle_string):
+        # trying to detect faces 
+        try:
+           # Find all the faces and face encodings in the unknown image
+            face_locations = face_recognition.face_locations(image)
+        except:
+            raise ValueError(
+                '{"code": 400, "message": "No face found"}')
+        
+        return(face_locations)
+    except:
+        raise
+
+
+def recognise(known_image_list, image):
+    try:
+      # Load an image with an unknown face
+        unknown_image = face_recognition.load_image_file(image)
+        # Find all the faces and face encodings in the unknown image
+        face_locations = face_recognition.face_locations(unknown_image)
+        face_encodings = face_recognition.face_encodings(unknown_image, face_locations)
+
+        found_names = []
+        found_faces = []
+        
+        for face in known_image_list:
+            known_encoding = load_encoding(face.encoding)
+            known_name = face.name
+
+            # print("Printing unknown_encoding "  + str(type(unknown_encoding))+str(unknown_encoding) + str(unknown_encoding.ndim) + str(unknown_encoding.shape) + str(unknown_encoding.size)+ str(len(unknown_encoding)))
+            # print("Printing known_encoding " + str(type(known_encoding))+str(known_encoding) + str(known_encoding.ndim) + str(known_encoding.shape) + str(known_encoding.size)+ str(len(known_encoding))) #
+            
+            # results = face_recognition.compare_faces([known_encoding], unknown_encoding)
+            # print("Face with name " + str(image.name) + " is similar to uploaded face: "+str(results))
+
+            # Loop through each face found in the unknown image
+            for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
+                # See if the face is a match for the known face(s)
+                matches = face_recognition.compare_faces([known_encoding], face_encoding)
+
+                # If a match was found in known_face_encodings, just use the first one.
+                # if True in matches:
+                #     first_match_index = matches.index(True)
+                #     name = known_face_names[first_match_index]
+
+                # Or instead, use the known face with the smallest distance to the new face
+                
+                face_distances = face_recognition.face_distance([known_encoding], face_encoding)
+                best_match_index = np.argmin(face_distances)
+                # print("best_match_index" + str(best_match_index))
+
+                if matches[best_match_index]:
+                    # name = known_name[best_match_index]
+                    # print("name" + str(type(known_name)) +str(known_name))
+                    found_names.append(known_name)
+                    # print("top, right, bottom, left" + str(top)+ str(right)+ str(bottom)+ str(left))
+                    location = [str(top), str(right), str(bottom), str(left)]
+                    separator = ', '
+
+                    location = separator.join(location)
+                    # print("location" + str(type(location)) +str(location))
+                    found_faces.append(location)
+        
+        return(found_names, found_faces)
+    except:
+        raise
+
+def load_encoding(pickle_string):
     try:
         some_array = pickle.loads(pickle_string)
         return(some_array)
