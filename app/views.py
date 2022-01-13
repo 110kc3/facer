@@ -14,7 +14,7 @@ from app.utils.get_auth_header import get_auth_header
 from app.utils.http_error_handler import http_error_handler
 from app.utils.check_if_valid_schema import check_if_valid_schema
 
-from app.scripts.image_handling import validate_image, get_faces
+from app.scripts.image_handling import validate_image, get_faces, load_image
 import os
 import face_recognition
 import numpy as np
@@ -131,41 +131,17 @@ def detect_face():
 
         
         unknown_image = face_recognition.load_image_file(file_to_verify)
-        unknown_encoding  = face_recognition.face_encodings(unknown_image)[0] #class 'numpy.ndarray'>
-        print("Printing unknown_encoding " + str(type(unknown_encoding))+str(unknown_encoding) + str(unknown_encoding.shape)) #
-
-
+        unknown_encoding  = face_recognition.face_encodings(unknown_image)[0] #class 'numpy.ndarray'> - first detected face 
+ 
         for image in images:
-            # print(str(type(image))+str(image)) #<class 'app.models.Image'> 84!\xc8\xbf\x00\x00\x0
-            known_encoding = image.encoding
-            print(str(known_encoding) + str(type(known_encoding)))
+            known_encoding = load_image(image.encoding)
 
+            # print("Printing unknown_encoding "  + str(type(unknown_encoding))+str(unknown_encoding) + str(unknown_encoding.ndim) + str(unknown_encoding.shape) + str(unknown_encoding.size)+ str(len(unknown_encoding)))
+            # print("Printing known_encoding " + str(type(known_encoding))+str(known_encoding) + str(known_encoding.ndim) + str(known_encoding.shape) + str(known_encoding.size)+ str(len(known_encoding))) #
             
-            known_encoding = np.reshape(128,)
-            print(str(known_encoding.shape) + str(known_encoding))
-            
-            k = known_encoding.tobytes()
-            y = np.frombuffer(k, dtype=known_encoding.dtype)
-            print(str(y.shape))
-            print(str(np.array_equal(y.reshape(128, ), known_encoding)))
+            results = face_recognition.compare_faces([known_encoding], unknown_encoding)
+            print("Face with name " + str(image.name) + " is similar to uploaded face: "+str(results))
 
-            # np_bytes = BytesIO()
-            # np.save(np_bytes, known_encoding, allow_pickle=True)
-
-            # np_bytes = np_bytes.getvalue()
-            # # print(str(type(np_bytes)))
-
-            # load_bytes = BytesIO(np_bytes)
-            # loaded_encoding = np.load(load_bytes, allow_pickle=True)
-            # print(str(type(loaded_encoding)) + str(loaded_encoding))
-            
-
-            results = face_recognition.compare_faces(y, unknown_encoding)
-            print(str(type(results)) + str(results) )
-
-
-            # image_encoding = session.query(Image).filter_by(image="encoding").all()
-            # print(str(type(image_encoding))+str(image_encoding))
 
         return "", 200
     except Exception as i:
