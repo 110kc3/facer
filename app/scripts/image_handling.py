@@ -60,7 +60,7 @@ def get_faces(image_location):
 
         # may be required later when retriving encoding from DB
         # pickle_string = pickle.dumps(new_face_encoding)
-
+        #todo: https://stackoverflow.com/questions/60278766/best-way-to-insert-python-numpy-array-into-postgresql-database
         return(img_byte_arr, new_face_encoding)
     except:
         raise
