@@ -115,7 +115,7 @@ def detect_face():
         file_to_verify = request.files['image']
         if(not file_to_verify):
             raise ValueError(
-                '{"code": 400, "message": "No image or name was delivered"}')
+                '{"code": 400, "message": "No image was delivered"}')
 
         user = session.query(User).filter_by(
             sub=token["sub"]).first()
