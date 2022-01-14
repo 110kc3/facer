@@ -5,11 +5,9 @@ CREATE TABLE users (
 );
 
 CREATE TABLE images (
-  image_id varchar primary key,
+  image_id serial primary key,
   name varchar not null,
-  image_location varchar not null,
+  filename varchar not null,
   owner_id integer not null,
   FOREIGN key (owner_id) REFERENCES users (user_id)
-  
 );
-

@@ -16,19 +16,20 @@ class User(db.Model):
         self.email = email
 
     def __repr__(self):
-        return '<User %r>' % self.email
+        return "<User(id='%s', email='%s', sub='%s')>" % (
+            self.user_id, self.email, self.sub)
 
 
 class Image(db.Model):
     __tablename__ = 'images'
     image_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
-    image_location = db.Column(db.String(255))
+    filename = db.Column(db.String(255), unique=True)
     owner_id = db.Column(db.Integer, ForeignKey('users.user_id'))
 
-    def __init__(self, name, image_location, owner_id):
+    def __init__(self, name, filename, owner_id):
         self.name = name
-        self.image_location = image_location
+        self.filename = filename
         self.owner_id = owner_id
 
     def __repr__(self):
