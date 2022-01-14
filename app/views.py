@@ -22,6 +22,7 @@ from io import BytesIO
 
 IMAGE_PER_USER_LIMIT = 99
 
+
 @app.route('/api/register', methods=['POST'])
 def register():
     try:
@@ -98,8 +99,8 @@ def add_user_image():
         return http_error_handler(i)
 
 
-
 # returns image (<class 'bytes'>) when providing image key (same as image filename - column in DB)
+# this should not even be here, data is not protected by any kind of authorization and authentication, also we dont need that sort of endpoint
 @app.route('/api/image/<id>', methods=['GET'])
 def get_face_image(id):
     image = read_image_from_s3(str(id))
@@ -110,33 +111,32 @@ def get_face_image(id):
 def detect_face():
     try:
         token = get_auth_header(request.headers)
-        
+
         file_to_verify = request.files['image']
         if(not file_to_verify):
             raise ValueError(
                 '{"code": 400, "message": "No image or name was delivered"}')
-        
+
         user = session.query(User).filter_by(
             sub=token["sub"]).first()
         if(not user):
             raise ValueError(
                 '{"code": 400, "message": "No such user found in db"}')
-        
-        #getting only our user images
-        images = session.query(Image).filter_by( #images <class 'list'>[<Image with face 'Obama'>, <
+
+        # getting only our user images
+        images = session.query(Image).filter_by(  # images <class 'list'>[<Image with face 'Obama'>, <
             owner_id=user.user_id).all()
         if(not images):
             raise ValueError(
                 '{"code": 400, "message": "No images to compare to"}')
 
-
         found_names = []
         found_faces = []
-    
-        found_names, found_faces = recognise(images, file_to_verify)
-       
-        print("found_names " + str(found_names) + " \n found_faces: "+str(found_faces))
 
+        found_names, found_faces = recognise(images, file_to_verify)
+
+        print("found_names " + str(found_names) +
+              " \n found_faces: "+str(found_faces))
 
         data = {'found_names': found_names, 'found_faces': found_faces}
         return data, 200
