@@ -84,8 +84,7 @@ def add_user_image():
                 '{"code": 400, "message": "Limit of images per user exceeded"}')
 
          # Cutting face from the image
-        [cutted_face, encoding] = get_faces(file)
-        # print("After conversion: \n" + str(encoding)  + str(type(encoding)))
+        cutted_face, encoding = get_faces(file)
         # cutted_face.save(os.path.join(app.config['UPLOAD_PATH'], "filename.png"))
 
         file_name = upload_file(cutted_face)
@@ -100,11 +99,29 @@ def add_user_image():
 
 
 # returns image (<class 'bytes'>) when providing image key (same as image filename - column in DB)
-# this should not even be here, data is not protected by any kind of authorization and authentication, also we dont need that sort of endpoint
-@app.route('/api/image/<id>', methods=['GET'])
-def get_face_image(id):
-    image = read_image_from_s3(str(id))
-    return image
+@app.route('/api/image', methods=['GET'])
+def get_face_image():
+    try:
+        token = get_auth_header(request.headers)
+
+        user = session.query(User).filter_by(
+            sub=token["sub"]).first()
+
+        if(not user):
+            raise ValueError(
+                '{"code": 400, "message": "No such user found in db"}')
+
+        images = session.query(Image).filter_by(
+            owner_id=user.user_id).all()
+
+        response = {}
+        for image in images:
+            response[image.name] = str(
+                read_image_from_s3(image.filename)).split("'")[1]
+
+        return response
+    except Exception as i:
+        return http_error_handler(i)
 
 
 @app.route("/api/recognise",  methods=['POST'])
