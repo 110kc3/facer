@@ -16,6 +16,7 @@ from app.utils.check_if_valid_schema import check_if_valid_schema
 
 from app.scripts.image_handling import validate_image, get_faces, load_encoding, recognise
 import os
+import json
 import face_recognition
 import numpy as np
 from io import BytesIO
@@ -114,12 +115,12 @@ def get_face_image():
         images = session.query(Image).filter_by(
             owner_id=user.user_id).all()
 
-        response = {}
+        response = []
         for image in images:
-            response[image.name] = str(
-                read_image_from_s3(image.filename)).split("'")[1]
+            response.append({"image": str(
+                read_image_from_s3(image.filename)).split("'")[1], "name": image.name})
 
-        return response
+        return json.dumps(response)
     except Exception as i:
         return http_error_handler(i)
 
