@@ -10,7 +10,7 @@ steps:
   # Install conda
   - name: python
     entrypoint: "yes"
-    args: ["Y", "|", "bash", "Miniconda3-py39_4.10.3-Linux-x86_64.sh"]
+    args: ["bash", "Miniconda3-py39_4.10.3-Linux-x86_64.sh"]
 
   # Create environment
   - name: python
