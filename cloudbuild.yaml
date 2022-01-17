@@ -9,10 +9,10 @@ steps:
     entrypoint: "echo"
     args: ["yes", "|", "bash", "Anaconda3-5.3.1-Linux-x86.sh"]
 
-  # Check if conda in path
+  # Init conda
   - name: python
-    entrypoint: "echo"
-    args: ["$PATH"]
+    entrypoint: "bash"
+    args: ["./anaconda3/bin/conda", "init"]
 
   # Create environment
   - name: python
