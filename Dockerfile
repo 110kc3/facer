@@ -10,7 +10,8 @@ ENV APP_HOME /app
 WORKDIR $APP_HOME
 COPY . ./
 
-RUN /bin/bash -c 'conda init bash && conda create --name opencv-env-3.6.13 python=3.6.13 && conda activate opencv-env-3.6.13 && pip install -r requirements.txt --user'
+RUN conda init bash
+RUN /bin/bash -c 'conda create --name opencv-env-3.6.13 python=3.6.13 && conda activate opencv-env-3.6.13 && pip install -r requirements.txt --user'
 RUN build -t us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/myimage:${SHORT_SHA} .,
 CMD push us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/myimage:${SHORT_SHA}
 
