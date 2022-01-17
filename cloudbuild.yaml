@@ -4,23 +4,15 @@ steps:
     entrypoint: wget
     args: ["https://repo.anaconda.com/archive/Anaconda3-5.3.1-Linux-x86.sh"]
 
-  # Install conda
-  - name: python
-    entrypoint: "echo"
-    args: ["yes", "|", "bash", "Anaconda3-5.3.1-Linux-x86.sh"]
-
-  # Which python
-  - name: which
-    args: ["python"]
-
-  # Which conda
-  - name: which
-    args: ["conda"]
+  # # Install conda
+  # - name: python
+  #   entrypoint: "echo"
+  #   args: ["yes", "|", "bash", "Anaconda3-5.3.1-Linux-x86.sh"]
 
   # Install conda v2
   - name: python
     entrypoint: "bash"
-    args: ["bash", "Anaconda3-5.3.1-Linux-x86.sh", "-f"]
+    args: [Anaconda3-5.3.1-Linux-x86.sh", "-f"]
 
   # Init conda
   - name: python
