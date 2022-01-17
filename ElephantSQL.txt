@@ -8,6 +8,7 @@ CREATE TABLE images (
   image_id serial primary key,
   name varchar not null,
   filename varchar not null,
+  encoding bytea not null,
   owner_id integer not null,
   FOREIGN key (owner_id) REFERENCES users (user_id)
 );

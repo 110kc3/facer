@@ -3,6 +3,12 @@ import os
 import boto3
 import uuid
 
+
+from PIL import Image
+from io import BytesIO
+import numpy as np
+import base64
+
 load_dotenv()
 aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
 aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
@@ -14,6 +20,9 @@ boto3_aws_client = boto3.client("cognito-idp", region_name="eu-central-1", aws_a
 boto3_s3_bucket = boto3.client("s3", region_name="eu-central-1", aws_access_key_id=aws_access_key_id,
                                    aws_secret_access_key=aws_secret_access_key)
 
+    
+boto3_s3_bucket_resource = boto3.resource("s3", region_name="eu-central-1", aws_access_key_id=aws_access_key_id,
+                                   aws_secret_access_key=aws_secret_access_key)
 
 def upload_file(file):
     """
@@ -30,15 +39,34 @@ def upload_file(file):
 
 
 
-def download_file(file_name):
-    """
-    Function to download a given file from an S3 bucket
-    """
-    s3 = boto3.resource('s3')
-    output = f"downloads/{file_name}"
-    s3.Bucket(bucket_name).download_file(file_name, output)
+def read_image_from_s3(key):
+    """Load image file from s3.
 
-    return output
+    Parameters
+    ----------
+    bucket: string
+        Bucket name
+    key : string
+        Path in s3
+
+    Returns
+    -------
+    np array
+        Image array
+    """
+    s3 = boto3_s3_bucket_resource
+    bucket = s3.Bucket(bucket_name)
+    object = bucket.Object(key)
+    response = object.get()
+    file_stream = response['Body']
+    image = Image.open(file_stream)
+    #Converting PIL Image.image object to base64 string
+    buffered = BytesIO()
+    image.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue())
+ 
+    return img_str
+
 
 
 def list_files():
