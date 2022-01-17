@@ -17,7 +17,7 @@ CMD build -t us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/myimage:${SH
 CMD push us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/myimage:${SHORT_SHA}
 
 # Install production dependencies.
-RUN conda activate opencv-env-3.6.13 && pip install --no-cache-dir -r requirements.txt
+RUN conda activate opencv-env-3.6.13 && python run.py
 
 # Run the web service on container startup. Here we use the gunicorn
 # webserver, with one worker process and 8 threads.
