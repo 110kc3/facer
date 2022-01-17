@@ -6,7 +6,7 @@ steps:
 
   # Install conda v2
   - name: python
-    args: ["bash", "Anaconda3-5.3.1-Linux-x86_64.sh"]
+    args: ["echo", "yes", "|", "bash", "Anaconda3-5.3.1-Linux-x86_64.sh"]
 
   # Init conda
   - name: python
