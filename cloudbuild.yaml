@@ -4,15 +4,9 @@ steps:
     entrypoint: wget
     args: ["https://repo.anaconda.com/archive/Anaconda3-5.3.1-Linux-x86.sh"]
 
-  # # Install conda
-  # - name: python
-  #   entrypoint: "echo"
-  #   args: ["yes", "|", "bash", "Anaconda3-5.3.1-Linux-x86.sh"]
-
   # Install conda v2
   - name: python
-    entrypoint: "bash"
-    args: ["Anaconda3-5.3.1-Linux-x86.sh"]
+    args: ["bash", "Anaconda3-5.3.1-Linux-x86.sh"]
 
   # Init conda
   - name: python
@@ -32,6 +26,11 @@ steps:
   - name: python
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
+
+  # # Install conda
+  # - name: python
+  #   entrypoint: "echo"
+  #   args: ["yes", "|", "bash", "Anaconda3-5.3.1-Linux-x86.sh"]
 
   # Docker Build
   - name: "gcr.io/cloud-builders/docker"
