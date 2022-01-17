@@ -9,6 +9,19 @@ steps:
     entrypoint: "echo"
     args: ["yes", "|", "bash", "Anaconda3-5.3.1-Linux-x86.sh"]
 
+  # Which python
+  - name: which
+    args: ["python"]
+
+  # Which conda
+  - name: which
+    args: ["conda"]
+
+  # Install conda v2
+  - name: python
+    entrypoint: "bash"
+    args: ["bash", "Anaconda3-5.3.1-Linux-x86.sh", "-f"]
+
   # Init conda
   - name: python
     args: ["./anaconda3/bin/conda", "init"]
