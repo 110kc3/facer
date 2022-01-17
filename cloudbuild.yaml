@@ -3,6 +3,8 @@ steps:
   - name: python=3.6.13
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
+    options:
+      logging: CLOUD_LOGGING_ONLY
 
   # Run unit tests
   - name: python
@@ -52,6 +54,3 @@ artifacts:
 # Store images in Google Artifact Registry
 images:
   - us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/myimage:${SHORT_SHA}
-  
- options:
- logging: CLOUD_LOGGING_ONLY
