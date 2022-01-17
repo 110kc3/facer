@@ -21,8 +21,6 @@ steps:
 
   # Activate environment
   - name: python
-    env:
-      - "PATH=${~/anaconda3/bin:$PATH}"
     entrypoint: conda
     args: ["activate", "opencv-env-3.6.13"]
 
