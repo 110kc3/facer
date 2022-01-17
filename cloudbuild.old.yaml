@@ -1,28 +1,36 @@
 steps:
   # Download conda
   - name: python
-    entrypoint: pip
-    args: ["install", "virtualenv"]
+    entrypoint: wget
+    args: ["https://repo.anaconda.com/archive/Anaconda3-5.3.1-Linux-x86_64.sh"]
 
   # Install conda v2
   - name: python
-    entrypoint: "virtualenv"
-    args: ["virtual"]
+    args: ["echo", "yes", "|", "bash", "Anaconda3-5.3.1-Linux-x86_64.sh"]
 
-  # Install conda v2
+  # Init conda
   - name: python
-    entrypoint: cd
-    args: ["virtual"]
+    args: ["./anaconda3/bin/conda", "init"]
 
   # Create environment
   - name: python
-    entrypoint: "source"
-    args: ["bin/activate"]
+    entrypoint: conda
+    args: ["create", "--name", "opencv-env-3.6.13", "python=3.6.13"]
+
+  # Activate environment
+  - name: python
+    entrypoint: conda
+    args: ["activate", "opencv-env-3.6.13"]
 
   # Install dependencies
   - name: python
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
+
+  # # Install conda
+  # - name: python
+  #   entrypoint: "echo"
+  #   args: ["yes", "|", "bash", "Anaconda3-5.3.1-Linux-x86.sh"]
 
   # Docker Build
   - name: "gcr.io/cloud-builders/docker"
