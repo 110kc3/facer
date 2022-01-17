@@ -12,11 +12,8 @@ COPY . ./
 
 RUN conda init
 RUN /bin/bash -c 'conda create --name opencv-env-3.6.13 python=3.6.13'
-RUN /bin/bash -c 'conda activate opencv-env-3.6.13 && pip install -r requirements.txt --user'
 RUN build -t us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/myimage:${SHORT_SHA} .,
 CMD push us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/myimage:${SHORT_SHA}
-
-# Install production dependencies.
 
 
 # Run the web service on container startup. Here we use the gunicorn
@@ -24,3 +21,4 @@ CMD push us-central1-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/myimage:${SHORT_
 # For environments with multiple CPU cores, increase the number of workers
 # to be equal to the cores available.
 # Timeout is set to 0 to disable the timeouts of the workers to allow Cloud Run to handle instance scaling.
+# RUN /bin/bash -c 'conda activate opencv-env-3.6.13 && pip install -r requirements.txt --user'
