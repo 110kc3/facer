@@ -3,8 +3,6 @@ steps:
   - name: python=3.6.13
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
-    options:
-      logging: CLOUD_LOGGING_ONLY
 
   # Run unit tests
   - name: python
@@ -44,6 +42,8 @@ steps:
         "managed",
         "--allow-unauthenticated",
       ]
+    options:
+      logging: CLOUD_LOGGING_ONLY
 
 # Save test logs to Google Cloud Storage
 artifacts:
