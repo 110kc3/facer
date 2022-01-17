@@ -1,6 +1,6 @@
 steps:
   # Install dependencies
-  - name: python=3.6.13
+  - name: python
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
 
