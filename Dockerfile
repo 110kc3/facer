@@ -10,6 +10,8 @@ ENV APP_HOME /app
 WORKDIR $APP_HOME
 COPY . ./
 
+RUN apt-get update -y
+RUN apt-get update
 RUN apt-get -y install cmake
 RUN pip install -r requirements.txt --user
 RUN python run.py
