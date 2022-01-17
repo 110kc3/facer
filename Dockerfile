@@ -10,6 +10,7 @@ ENV APP_HOME /app
 WORKDIR $APP_HOME
 COPY . ./
 
+CMD conda init
 CMD conda create --name opencv-env-3.6.13 python=3.6.13
 CMD conda activate opencv-env-3.6.13
 CMD pip install -r requirements.txt --user
