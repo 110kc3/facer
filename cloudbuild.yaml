@@ -1,13 +1,23 @@
 steps:
+  # Install conda
+  - name: python
+    entrypoint: pip
+    args: ["install", "conda"]
+
+  # Create environment
+  - name: python
+    entrypoint: conda
+    args: ["create", "--name", "opencv-env-3.6.13", "python=3.6.13"]
+
+  # Activate environment
+  - name: python
+    entrypoint: conda
+    args: ["activate", "opencv-env-3.6.13"]
+
   # Install dependencies
   - name: python
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
-
-  # Run unit tests
-  - name: python
-    entrypoint: python
-    args: ["-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"]
 
   # Docker Build
   - name: "gcr.io/cloud-builders/docker"
