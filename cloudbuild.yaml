@@ -12,7 +12,7 @@ steps:
   # Install conda v2
   - name: python
     entrypoint: "bash"
-    args: [Anaconda3-5.3.1-Linux-x86.sh"]
+    args: ["Anaconda3-5.3.1-Linux-x86.sh"]
 
   # Init conda
   - name: python
