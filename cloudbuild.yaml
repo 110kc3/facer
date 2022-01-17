@@ -9,6 +9,11 @@ steps:
     entrypoint: "echo"
     args: ["yes", "|", "bash", "Anaconda3-5.3.1-Linux-x86.sh"]
 
+  # Add conda to path
+  - name: python
+    entrypoint: "export"
+    args: ["PATH=~/anaconda3/bin:$PATH"]
+
   # Create environment
   - name: python
     entrypoint: conda
