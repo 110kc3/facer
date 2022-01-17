@@ -1,8 +1,13 @@
 steps:
+  # Download conda
+  - name: python
+    entrypoint: wget
+    args: ["https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86.sh"]
+
   # Install conda
   - name: python
-    entrypoint: pip
-    args: ["install", "conda"]
+    entrypoint: bash
+    args: ["Anaconda3-2020.02-Linux-x86.sh"]
 
   # Create environment
   - name: python
