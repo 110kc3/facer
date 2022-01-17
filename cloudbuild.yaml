@@ -9,6 +9,10 @@ steps:
     entrypoint: "echo"
     args: ["yes", "|", "bash", "Anaconda3-5.3.1-Linux-x86.sh"]
 
+  # Ls
+  - name: python
+    entrypoint: "ls"
+
   # Init conda
   - name: python
     entrypoint: "bash"
