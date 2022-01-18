@@ -1,25 +1,59 @@
-# Use the official lightweight Python image.
-# https://hub.docker.com/_/python
-FROM continuumio/miniconda3
+FROM python:3.6.13
 
-
-# Allow statements and log messages to immediately appear in the Knative logs
-ENV PYTHONUNBUFFERED True
-
-# Copy local code to the container image.
 ENV APP_HOME /app
 WORKDIR $APP_HOME
 COPY . ./
 
-RUN /bin/bash -c 'conda init'
-RUN /bin/bash -c 'conda create --name opencv-env-3.6.13 python=3.6.13 && conda activate opencv-env-3.6.13 && pip install -r requirements.txt --user'
-RUN python run.py
+RUN apt-get -y update && \
+    apt-get install -y --fix-missing \
+    build-essential \
+    cmake \
+    gfortran \
+    git \
+    wget \
+    curl \
+    graphicsmagick \
+    libgraphicsmagick1-dev \
+    libatlas-dev \
+    libavcodec-dev \
+    libavformat-dev \
+    libboost-all-dev \
+    libgtk2.0-dev \
+    libjpeg-dev \
+    liblapack-dev \
+    libswscale-dev \
+    pkg-config \
+    python3-dev \
+    python3-numpy \
+    software-properties-common \
+    zip \
+    && apt-get clean && rm -rf /tmp/* /var/tmp/*
 
 
+# Install DLIB
+RUN cd ~ && \
+    mkdir -p dlib && \
+    git clone -b 'v19.4' --single-branch https://github.com/davisking/dlib.git dlib/ 
+    
+# Copy updated makefile
+COPY CMakeLists.txt ~/dlib/tools/python/CMakeLists.txt
+    
+RUN cd ~ && \
+    cd dlib/ && \
+    python3 setup.py install 
+    #--yes USE_AVX_INSTRUCTIONS
 
-# Run the web service on container startup. Here we use the gunicorn
-# webserver, with one worker process and 8 threads.
-# For environments with multiple CPU cores, increase the number of workers
-# to be equal to the cores available.
-# Timeout is set to 0 to disable the timeouts of the workers to allow Cloud Run to handle instance scaling.
-# RUN /bin/bash -c 'conda activate opencv-env-3.6.13 && '
+
+# Install Flask
+RUN cd ~ && \
+    pip3 install flask
+
+
+# Install Face-Recognition Python Library
+RUN cd ~ && \
+    pip3 install -r requirements.txt
+
+
+# Start the web service
+CMD cd /root/ && \
+    python3 run.py
