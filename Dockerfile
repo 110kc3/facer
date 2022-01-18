@@ -22,4 +22,5 @@ RUN pip install cmake
 RUN pip install dlib
 RUN pip install -r requirements.txt --user
 
+ENTRYPOINT ["/bin/bash"]
 CMD ["conda", "activate", "conda-env", "&&", "python", "run.py"]
