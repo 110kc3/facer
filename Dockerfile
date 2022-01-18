@@ -13,15 +13,6 @@ RUN apt-get -y update && \
     wget \
     curl \
     graphicsmagick \
-    libgraphicsmagick1-dev \
-    libatlas-dev \
-    libavcodec-dev \
-    libavformat-dev \
-    libboost-all-dev \
-    libgtk2.0-dev \
-    libjpeg-dev \
-    liblapack-dev \
-    libswscale-dev \
     pkg-config \
     python3-dev \
     python3-numpy \
