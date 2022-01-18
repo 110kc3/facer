@@ -22,4 +22,5 @@ RUN pip install cmake
 RUN pip install dlib
 RUN pip install -r requirements.txt --user
 
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "conda-env", "python", "run.py"]
+# ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "conda-env", "python", "run.py"]
+CMD exec gunicorn --bind 0.0.0.0:$PORT --workers 1 run:app --timeout 900 --log-level debug
