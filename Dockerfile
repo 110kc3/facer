@@ -27,4 +27,4 @@ RUN pip install -r requirements.txt --user
 # ENTRYPOINT ["/bin/bash"]
 # CMD [ "conda activate conda-env && python run.py" ]
 
-ENTRYPOINT ["/bin/bash", "-c", "conda activate conda-env && python run.py"] # comment others / uncomment this
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "conda-env", "/bin/bash", "-c", "python", "run.py"]
