@@ -26,8 +26,6 @@ RUN cd ~ && \
     mkdir -p dlib && \
     git clone -b 'v19.22' --single-branch https://github.com/davisking/dlib.git dlib/ 
     
-# Copy updated makefile
-COPY CMakeLists.txt ~/dlib/tools/python/CMakeLists.txt
     
 RUN cd ~ && \
     cd dlib/ && \
