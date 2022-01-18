@@ -24,7 +24,7 @@ RUN apt-get -y update && \
 # Install DLIB
 RUN cd ~ && \
     mkdir -p dlib && \
-    git clone -b 'v19.4' --single-branch https://github.com/davisking/dlib.git dlib/ 
+    git clone -b 'v19.22' --single-branch https://github.com/davisking/dlib.git dlib/ 
     
 # Copy updated makefile
 COPY CMakeLists.txt ~/dlib/tools/python/CMakeLists.txt
@@ -43,7 +43,6 @@ RUN cd ~ && \
 # Install Face-Recognition Python Library
 RUN cd ~ && \
     pip3 install -r requirements.txt
-
 
 # Start the web service
 CMD cd /root/ && \
