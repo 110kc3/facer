@@ -11,6 +11,7 @@ ENV APP_HOME /app
 WORKDIR $APP_HOME
 COPY . ./
 
+RUN /bin/bash -c 'conda init'
 RUN /bin/bash -c 'conda create --name opencv-env-3.6.13 python=3.6.13 && conda activate opencv-env-3.6.13 && pip install -r requirements.txt --user'
 RUN python run.py
 
