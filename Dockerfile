@@ -75,6 +75,6 @@ WORKDIR $APP_HOME
 COPY . ./
 
 RUN pip install -r requirements.txt
-RUN apt-get install libtk8.6
+RUN echo yes | apt-get install -y libtk8.6 
 
 CMD exec python run.py
