@@ -77,5 +77,6 @@ COPY . ./
 RUN pip install -r requirements.txt
 # RUN echo yes | apt-get install -y libtk8.6 
 # RUN apt-get install ffmpeg libsm6 libxext6  -y
+RUN pip install flask
 
 CMD exec python run.py
