@@ -29,4 +29,4 @@ COPY . ./
 
 RUN pip install -r requirements.txt
 
-CMD exec python run.py
+CMD sdsdsdss
