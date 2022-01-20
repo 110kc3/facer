@@ -29,4 +29,5 @@ COPY . ./
 
 RUN pip install -r requirements.txt
 
-CMD ["python", "/run.py"]
+ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
+CMD ["python", "run.py"]
