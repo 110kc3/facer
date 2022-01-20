@@ -29,4 +29,5 @@ COPY . ./
 
 RUN pip install -r requirements.txt
 
-CMD sdsdsdss
+ENTRYPOINT ["/bin/bash"]
+CMD ["python", "run.py"]
