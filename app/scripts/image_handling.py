@@ -98,7 +98,6 @@ def recognise(known_image_list, image):
         face_encodings = face_recognition.face_encodings(
             unknown_image, face_locations)
 
-        found_names = []
         found_faces = []
 
         for face in known_image_list:
@@ -130,18 +129,10 @@ def recognise(known_image_list, image):
                 # print("best_match_index" + str(best_match_index))
 
                 if matches[best_match_index]:
-                    # name = known_name[best_match_index]
-                    # print("name" + str(type(known_name)) +str(known_name))
-                    found_names.append(known_name)
-                    # print("top, right, bottom, left" + str(top)+ str(right)+ str(bottom)+ str(left))
-                    location = [str(top), str(right), str(bottom), str(left)]
-                    separator = ', '
+                    found_faces.append(
+                        {"coordinates": [top, right, bottom, left], "name": known_name})
 
-                    location = separator.join(location)
-                    # print("location" + str(type(location)) +str(location))
-                    found_faces.append(location)
-
-        return(found_names, found_faces)
+        return found_faces
     except:
         raise
 

@@ -148,16 +148,13 @@ def detect_face():
             raise ValueError(
                 '{"code": 400, "message": "No images to compare to"}')
 
-        found_names = []
-        found_faces = []
+        data = recognise(images, file_to_verify)
 
-        found_names, found_faces = recognise(images, file_to_verify)
+        if(len(data) == 0):
+            raise ValueError(
+                '{"code": 400, "message": "No face found"}')
 
-        print("found_names " + str(found_names) +
-              " \n found_faces: "+str(found_faces))
-
-        data = {'found_names': found_names, 'found_faces': found_faces}
-        return data, 200
+        return json.dumps(data), 200
     except Exception as i:
         return http_error_handler(i)
 
