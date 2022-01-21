@@ -32,6 +32,10 @@ FROM jeffbebe/full-image
 # ENV APP_HOME /app
 # WORKDIR $APP_HOME
 COPY . ./
+RUN touch .env
+RUN echo "DATABASE_URL = '$_DATABASE_URL'" \
+    >> plik
+
 EXPOSE 8080
 # #RUN pip install --no-cache-dir -r requirements.txt
 
