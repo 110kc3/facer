@@ -38,8 +38,8 @@ EXPOSE 8080
 
 # #ENTRYPOINT [ "/bin/bash", "-c" ]
 # #CMD python --version
-CMD exec  gunicorn --bind :$PORT main:app
+#CMD exec  gunicorn --bind :$PORT main:app
 # #CMD ["gunicorn"  , "--bind", "0.0.0.0:8000", "main:app"]
 # #CMD ["python", "main.py"]
 # #CMD  gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app
-# CMD exec gunicorn main:app --log-file -
+CMD exec python main.py
