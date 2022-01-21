@@ -38,7 +38,7 @@ RUN echo "DATABASE_URL = '$_DATABASE_URL'" \
 
 EXPOSE 8080
 # RUN pip install -r requirements.txt
-RUN pip install -U flask-cors
+#RUN pip install -U flask-cors
 
 # #ENTRYPOINT [ "/bin/bash", "-c" ]
 # #CMD python --version

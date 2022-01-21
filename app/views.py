@@ -126,7 +126,6 @@ def get_face_image():
 
 
 @app.route("/api/recognise",  methods=['POST'])
-@cross_origin()
 def detect_face():
     try:
         token = get_auth_header(request.headers)
