@@ -6,6 +6,7 @@ import os
 load_dotenv()
 dbUrl = os.environ.get("DATABASE_URL")
 
-engine = create_engine(dbUrl)
-Session = sessionmaker(bind=engine)
-session = Session()
+# engine = create_engine(dbUrl)
+# Session = sessionmaker(bind=engine)
+# session = Session()
+session = 5
