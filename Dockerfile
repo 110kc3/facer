@@ -31,9 +31,8 @@ FROM jeffbebe/full-image
 # # Copy local code to the container image.
 # ENV APP_HOME /app
 # WORKDIR $APP_HOME
-# COPY . ./
-
-# EXPOSE 8080
+COPY . ./
+EXPOSE 8080
 # #RUN pip install --no-cache-dir -r requirements.txt
 
 
