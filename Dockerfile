@@ -34,7 +34,7 @@ FROM jeffbebe/full-image
 COPY . ./
 RUN touch .env
 RUN echo "DATABASE_URL = '$_DATABASE_URL'" \
-    >> plik
+    >> .env
 
 EXPOSE 8080
 # #RUN pip install --no-cache-dir -r requirements.txt
