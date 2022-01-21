@@ -2,11 +2,8 @@ from dotenv import load_dotenv
 import os
 import boto3
 import uuid
-
-
 from PIL import Image
 from io import BytesIO
-import numpy as np
 import base64
 
 load_dotenv()
@@ -67,7 +64,31 @@ def read_image_from_s3(key):
  
     return img_str
 
+def delete_image_from_s3(key):
+    """Load image file from s3.
 
+    Parameters
+    ----------
+    bucket: string
+        Bucket name
+    key : string
+        Path in s3
+
+    Returns
+    -------
+    0
+    """
+    try:
+        s3 = boto3_s3_bucket_resource
+        bucket = s3.Bucket(bucket_name)
+        object = bucket.Object(key)
+        object.delete()
+
+    except:
+        raise ValueError(
+            '{"code": 400, "message": "Could not delete image from s3 bucket"}')
+
+    return 0
 
 def list_files():
     """

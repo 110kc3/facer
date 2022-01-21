@@ -5,21 +5,18 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
-from flask import request, send_from_directory
+from flask import request
 from app import app
 from app.models import User, Image
 from app.database import session
-from app.boto3_service import boto3_aws_client, upload_file, read_image_from_s3
+from app.boto3_service import boto3_aws_client, upload_file, read_image_from_s3, delete_image_from_s3
 from app.utils.get_auth_header import get_auth_header
 from app.utils.http_error_handler import http_error_handler
 from app.utils.check_if_valid_schema import check_if_valid_schema
 
-from app.scripts.image_handling import validate_image, get_faces, load_encoding, recognise
-import os
+from app.utils.image_handling import get_faces, recognise
 import json
-import face_recognition
-import numpy as np
-from io import BytesIO
+
 
 IMAGE_PER_USER_LIMIT = 99
 
@@ -119,8 +116,38 @@ def get_face_image():
         for image in images:
             response.append({"image": str(
                 read_image_from_s3(image.filename)).split("'")[1], "name": image.name})
-
+        
         return json.dumps(response)
+    except Exception as i:
+        return http_error_handler(i)
+
+@app.route('/api/image/delete/<id>', methods=["DELETE"])
+def delete_face_image(id):
+    try:
+        token = get_auth_header(request.headers)
+
+        user = session.query(User).filter_by(
+            sub=token["sub"]).first()
+
+        if(not user):
+            raise ValueError(
+                '{"code": 400, "message": "No such user found in db"}')
+
+        image = session.query(Image).filter_by(
+            owner_id=user.user_id, filename=id).first()
+
+        try:
+            #delete from database
+            session.delete(image)
+            session.commit()
+
+            #delete from s3
+            delete_image_from_s3(id)
+        except:
+            print("failed to delete image")
+        
+        
+        return "", 200
     except Exception as i:
         return http_error_handler(i)
 
