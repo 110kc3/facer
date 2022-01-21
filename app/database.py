@@ -6,6 +6,7 @@ import os
 load_dotenv()
 dbUrl = os.environ.get("_DATABASE_URL")
 print(dbUrl)
-engine = create_engine(dbUrl)
+engine = create_engine(
+    "postgresql+psycopg2://sqgspjyu:LNOQ-mDRqHuUVaHyAo-OU15QYm7ryT08@tyke.db.elephantsql.com/sqgspjyu")
 Session = sessionmaker(bind=engine)
 session = Session()
