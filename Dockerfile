@@ -37,8 +37,8 @@ RUN echo "DATABASE_URL = '$_DATABASE_URL'" \
     >> .env
 
 EXPOSE 8080
-RUN pip install -r requirements.txt
-
+# RUN pip install -r requirements.txt
+RUN pip install -U flask-cors
 
 # #ENTRYPOINT [ "/bin/bash", "-c" ]
 # #CMD python --version
