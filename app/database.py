@@ -4,9 +4,8 @@ from sqlalchemy.orm import sessionmaker
 import os
 
 load_dotenv()
-dbUrl = os.environ.get("_DATABASE_URL")
+dbUrl = os.environ.get("DATABASE_URL")
 print(os.environ)
-engine = create_engine(
-    "postgresql+psycopg2://sqgspjyu:LNOQ-mDRqHuUVaHyAo-OU15QYm7ryT08@tyke.db.elephantsql.com/sqgspjyu")
+engine = create_engine(dbUrl)
 Session = sessionmaker(bind=engine)
 session = Session()
