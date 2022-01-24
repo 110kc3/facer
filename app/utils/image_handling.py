@@ -15,6 +15,8 @@ def validate_image(stream):
     return '.' + (format if format != 'jpeg' else 'jpg')
 
 # Metod detecting face in an image and returning image with cutted face only and the face encoding needed later to detect a face
+
+
 def get_faces(image_location):
     try:
         face_location = image_location
@@ -35,7 +37,7 @@ def get_faces(image_location):
         top, right, bottom, left = new_face_location[0]  # <class 'tuple'>
 
         # Accessing face itself
-        # print("A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}".format(top, left, bottom, right))
+        # "A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}".format(top, left, bottom, right)
         # <class 'numpy.ndarray'>
         face_image = new_image[top:bottom, left:right]
 
@@ -56,6 +58,8 @@ def get_faces(image_location):
         raise i
 
 # returning list of faces locations
+
+
 def get_all_faces_locations(image):
     try:
         # Load picture and learn how to recognize it.
@@ -89,12 +93,6 @@ def recognise(known_image_list, image):
         for face in known_image_list:
             known_encoding = load_encoding(face.encoding)
             known_name = face.name
-
-            # print("Printing unknown_encoding "  + str(type(unknown_encoding))+str(unknown_encoding) + str(unknown_encoding.ndim) + str(unknown_encoding.shape) + str(unknown_encoding.size)+ str(len(unknown_encoding)))
-            # print("Printing known_encoding " + str(type(known_encoding))+str(known_encoding) + str(known_encoding.ndim) + str(known_encoding.shape) + str(known_encoding.size)+ str(len(known_encoding))) #
-
-            # results = face_recognition.compare_faces([known_encoding], unknown_encoding)
-            # print("Face with name " + str(image.name) + " is similar to uploaded face: "+str(results))
 
             # Loop through each face found in the unknown image
             for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):

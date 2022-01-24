@@ -31,6 +31,3 @@ class Image(db.Model):
         self.filename = filename
         self.encoding = encoding
         self.owner_id = owner_id
-
-    def __repr__(self):
-        return '<Image with face %r>' % self.name

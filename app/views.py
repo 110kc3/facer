@@ -115,13 +115,14 @@ def get_face_image():
         response = []
         for image in images:
             response.append({"image": str(
-                read_image_from_s3(image.filename)).split("'")[1], "name": image.name})
-        
+                read_image_from_s3(image.filename)).split("'")[1], "name": image.name, "id": image.image_id})
+
         return json.dumps(response)
     except Exception as i:
         return http_error_handler(i)
 
-@app.route('/api/image/delete/<id>', methods=["DELETE"])
+
+@app.route('/api/image/<id>', methods=["DELETE"])
 def delete_face_image(id):
     try:
         token = get_auth_header(request.headers)
@@ -134,19 +135,23 @@ def delete_face_image(id):
                 '{"code": 400, "message": "No such user found in db"}')
 
         image = session.query(Image).filter_by(
-            owner_id=user.user_id, filename=id).first()
+            owner_id=user.user_id, image_id=id).first()
+
+        if(not image):
+            raise ValueError(
+                '{"code": 404, "message": "Could not find an image with that id"}')
 
         try:
-            #delete from database
+            # delete from database
             session.delete(image)
             session.commit()
 
-            #delete from s3
+            # delete from s3
             delete_image_from_s3(id)
         except:
-            print("failed to delete image")
-        
-        
+            raise ValueError(
+                '{"code": 400, "message": "Could not delete an image"}')
+
         return "", 200
     except Exception as i:
         return http_error_handler(i)
@@ -169,8 +174,9 @@ def detect_face():
                 '{"code": 400, "message": "No such user found in db"}')
 
         # getting only our user images
-        images = session.query(Image).filter_by(  # images <class 'list'>[<Image with face 'Obama'>, <
+        images = session.query(Image).filter_by(
             owner_id=user.user_id).all()
+
         if(not images):
             raise ValueError(
                 '{"code": 400, "message": "No images to compare to"}')
