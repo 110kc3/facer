@@ -46,4 +46,4 @@ EXPOSE 8080
 # #CMD ["gunicorn"  , "--bind", "0.0.0.0:8000", "main:app"]
 # #CMD ["python", "main.py"]
 # #CMD  gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app
-CMD cat .env
+CMD python main.py
