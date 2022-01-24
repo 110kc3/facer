@@ -33,8 +33,11 @@ FROM jeffbebe/full-image
 # WORKDIR $APP_HOME
 COPY . ./
 RUN touch .env
-RUN echo "DATABASE_URL = ${_DATABASE_URL}" \
-    >> .env
+RUN echo "DATABASE_URL = ${_DATABASE_URL}" >> .env
+RUN echo "1 = $_DATABASE_URL" >> .env
+RUN echo "2 = $PROJECT_ID" >> .env
+RUN echo "3 = '$PROJECT_ID'" >> .env
+RUN cat .env
 
 EXPOSE 8080
 # RUN pip install -r requirements.txt
