@@ -33,7 +33,7 @@ FROM jeffbebe/full-image
 # WORKDIR $APP_HOME
 COPY . ./
 RUN touch .env
-RUN echo "DATABASE_URL = $_DATABASE_URL" \
+RUN echo "DATABASE_URL = ${_DATABASE_URL}" \
     >> .env
 
 EXPOSE 8080
