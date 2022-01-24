@@ -33,7 +33,7 @@ FROM jeffbebe/full-image
 # WORKDIR $APP_HOME
 COPY . ./
 RUN touch .env
-RUN echo "DATABASE_URL = '$_DATABASE_URL'" \
+RUN echo "DATABASE_URL = $_DATABASE_URL" \
     >> .env
 
 EXPOSE 8080
@@ -46,4 +46,4 @@ EXPOSE 8080
 # #CMD ["gunicorn"  , "--bind", "0.0.0.0:8000", "main:app"]
 # #CMD ["python", "main.py"]
 # #CMD  gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app
-CMD exec python main.py
+CMD cat .env
