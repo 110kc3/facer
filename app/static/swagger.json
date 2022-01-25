@@ -1,0 +1,269 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This application allows you to detect faces on photos that you upload. You can also store your photos with detected faces to a database. Application will also recognize previously stored faces.",
+    "version": "4.2.0",
+    "title": "Facer",
+    "termsOfService": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "contact": {
+      "email": "oskasta077@student.polsl.pl"
+    }
+  },
+  "paths": {
+    "/api/register": {
+      "post": {
+        "tags": [
+          "api"
+        ],
+        "summary": "Add a new user to the database",
+        "description": "Adds a new user to database if all entered data meets the cryteria",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Token",
+            "description": "Authorization token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User email and password",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Register"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "400": {
+            "description": "Invalid user data"
+          }
+        }
+      }
+    },
+    "/api/image": {
+      "post": {
+        "tags": [
+          "api"
+        ],
+        "summary": "Saving images in database",
+        "description": "Saving images in the program and the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Token",
+            "description": "Authorization token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "image",
+            "description": "imge to be uploaded",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "No image or name was delivered"
+          },
+          "405": {
+            "description": "No such user found in db"
+          },
+          "406": {
+            "description": "Limit of images per user exceeded"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "api"
+        ],
+        "summary": "returns image when providing image key",
+        "description": "returns image (<class 'bytes'>) when providing image key (same as image filename - column in DB)",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json",
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "image",
+            "description": "imge to be downloaded",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "No such user found in db"
+          }
+        },
+        "security": [
+          {
+            "Token": []
+          }
+        ]
+      }
+    },
+    "/api/image/<id>": {
+      "delete": {
+        "tags": [
+          "api"
+        ],
+        "summary": "Deletes image",
+        "description": "Deletes image from database",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Token",
+            "description": "Authorization token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "imge",
+            "description": "Image to be deleted",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "No such user found in db"
+          },
+          "404": {
+            "description": "Could not find an image with that id"
+          },
+          "405": {
+            "description": "Could not delete an image"
+          }
+        }
+      }
+    },
+    "/api/recognise": {
+      "post": {
+        "tags": [
+          "api"
+        ],
+        "summary": "Recognise face on image",
+        "description": "Recognise face on image",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Token",
+            "description": "Authorization token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "image",
+            "description": "imge with detected face",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "No image or name was delivered"
+          },
+          "405": {
+            "description": "No such user found in db"
+          },
+          "406": {
+            "description": "Limit of images per user exceeded"
+          },
+          "407": {
+            "description": "No face found"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Token": {
+      "type": "apiKey",
+      "name": "Token",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "Register": {
+      "type": "object",
+      "properties": {
+        "emailAddress": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "addImage": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "detectFace": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "object"
+        }
+      }
+    },
+    "deleteFace": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}

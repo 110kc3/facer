@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
+from flask_swagger_ui import get_swaggerui_blueprint
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -10,8 +11,22 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_BINDS'] = ""
 # app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
-app.config['UPLOAD_PATH'] = 'app/static/images'
 db = SQLAlchemy(app)
+
+
+
+### swagger specific ###
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "Facer"
+    }
+)
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+### end swagger specific ###
 
 app.config.from_object(__name__)
 

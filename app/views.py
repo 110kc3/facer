@@ -72,14 +72,14 @@ def add_user_image():
 
         if(not user):
             raise ValueError(
-                '{"code": 400, "message": "No such user found in db"}')
+                '{"code": 405, "message": "No such user found in db"}')
 
         images = session.query(Image).filter_by(
             owner_id=user.user_id).all()
 
         if(len(images) > IMAGE_PER_USER_LIMIT):
             raise ValueError(
-                '{"code": 400, "message": "Limit of images per user exceeded"}')
+                '{"code": 406, "message": "Limit of images per user exceeded"}')
 
          # Cutting face from the image
         cutted_face, encoding = get_faces(file)
@@ -150,7 +150,7 @@ def delete_face_image(id):
             delete_image_from_s3(id)
         except:
             raise ValueError(
-                '{"code": 400, "message": "Could not delete an image"}')
+                '{"code": 405, "message": "Could not delete an image"}')
 
         return "", 200
     except Exception as i:
@@ -171,7 +171,7 @@ def detect_face():
             sub=token["sub"]).first()
         if(not user):
             raise ValueError(
-                '{"code": 400, "message": "No such user found in db"}')
+                '{"code": 405, "message": "No such user found in db"}')
 
         # getting only our user images
         images = session.query(Image).filter_by(
@@ -179,13 +179,13 @@ def detect_face():
 
         if(not images):
             raise ValueError(
-                '{"code": 400, "message": "No images to compare to"}')
+                '{"code": 406, "message": "No images to compare to"}')
 
         data = recognise(images, file_to_verify)
 
         if(len(data) == 0):
             raise ValueError(
-                '{"code": 400, "message": "No face found"}')
+                '{"code": 407, "message": "No face found"}')
 
         return json.dumps(data), 200
     except Exception as i:
