@@ -10,5 +10,4 @@ def check_if_valid_schema(schema_name, request):
             raise ValueError(
                 '{"code": 400, "message": "Invalid body format"}')
     except Exception as i:
-        print(str(i))
         raise

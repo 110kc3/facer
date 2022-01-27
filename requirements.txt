@@ -35,3 +35,4 @@ boto3>=1.20
 uuid==1.30
 pickle-mixin==1.0.2
 flask-swagger-ui==3.36.0
+flask-cors
