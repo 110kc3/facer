@@ -17,7 +17,8 @@ def get_auth_header(headers):
         token_header = headers["Authorization"]
         token = token_header.split("Bearer ")[1]
         if (len(token) == 0):
-            raise ValueError()
+            raise ValueError(
+                '{"code": 401, "message": "Invalid authorization header"}')
         return verify_token_signature(token)
     except:
         raise ValueError(
@@ -31,4 +32,5 @@ def verify_token_signature(jwt_token):
         return jwt.decode(
             jwt_token, key=key, algorithms=['RS256'], do_time_check=True)
     except:
-        raise ValueError()
+        raise ValueError(
+            '{"code": 401, "message": "Invalid authorization header"}')
