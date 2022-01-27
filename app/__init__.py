@@ -1,4 +1,3 @@
-from app import views  # important to retrieve routes despite not being strictly used, must be in last line, otherwise routes will not be retrieved
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
@@ -31,3 +30,4 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 ### end swagger specific ###
 
 app.config.from_object(__name__)
+from app import views  # important to retrieve routes despite not being strictly used, must be in last line, otherwise routes will not be retrieved
