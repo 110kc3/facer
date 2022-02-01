@@ -185,7 +185,7 @@ def detect_face():
 
         if(len(data) == 0):
             raise ValueError(
-                '{"code": 400, "message": "No face found"}')
+                '{"code": 404, "message": "No face found"}')
 
         return json.dumps(data), 200
     except Exception as i:

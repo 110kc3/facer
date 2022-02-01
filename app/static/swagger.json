@@ -9,25 +9,19 @@
       "email": "oskasta077@student.polsl.pl"
     }
   },
+  "responses": {
+    "401": {
+      "description": "Unauthorized"
+    }
+  },
   "paths": {
     "/api/register": {
       "post": {
-        "tags": [
-          "api"
-        ],
+        "tags": ["api"],
         "summary": "Add a new user to the database",
         "description": "Adds a new user to database if all entered data meets the cryteria",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
-          {
-            "in": "header",
-            "name": "Token",
-            "description": "Authorization token",
-            "required": true,
-            "type": "string"
-          },
           {
             "in": "body",
             "name": "body",
@@ -50,22 +44,11 @@
     },
     "/api/image": {
       "post": {
-        "tags": [
-          "api"
-        ],
+        "tags": ["api"],
         "summary": "Saving images in database",
         "description": "Saving images in the program and the database",
-        "consumes": [
-          "multipart/form-data"
-        ],
+        "consumes": ["multipart/form-data"],
         "parameters": [
-          {
-            "in": "header",
-            "name": "Token",
-            "description": "Authorization token",
-            "required": true,
-            "type": "string"
-          },
           {
             "in": "formData",
             "name": "image",
@@ -74,46 +57,38 @@
             "type": "file"
           }
         ],
+        "security": [
+          {
+            "Token": []
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
           },
           "400": {
-            "description": "No image or name was delivered"
+            "description": "No image or name was delivered || Limit of images per user exceeded"
           },
-          "405": {
+          "401": {
+            "$ref": "#/responses/401"
+          },
+          "404": {
             "description": "No such user found in db"
-          },
-          "406": {
-            "description": "Limit of images per user exceeded"
           }
         }
       },
       "get": {
-        "tags": [
-          "api"
-        ],
-        "summary": "returns image when providing image key",
-        "description": "returns image (<class 'bytes'>) when providing image key (same as image filename - column in DB)",
-        "consumes": [
-          "multipart/form-data"
-        ],
-        "produces": [
-          "application/json",
-          "multipart/form-data"
-        ],
-        "parameters": [
-          {
-            "in": "formData",
-            "name": "image",
-            "description": "imge to be downloaded",
-            "required": true,
-            "type": "file"
-          }
-        ],
+        "tags": ["api"],
+        "summary": "Returns user's images",
+        "description": "Returns user's images",
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json", "multipart/form-data"],
         "responses": {
           "400": {
             "description": "No such user found in db"
+          },
+          "401": {
+            "$ref": "#/responses/401"
           }
         },
         "security": [
@@ -125,26 +100,12 @@
     },
     "/api/image/<id>": {
       "delete": {
-        "tags": [
-          "api"
-        ],
+        "tags": ["api"],
         "summary": "Deletes image",
         "description": "Deletes image from database",
-        "consumes": [
-          "multipart/form-data"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/xml", "application/json"],
         "parameters": [
-          {
-            "in": "header",
-            "name": "Token",
-            "description": "Authorization token",
-            "required": true,
-            "type": "string"
-          },
           {
             "in": "formData",
             "name": "imge",
@@ -153,40 +114,34 @@
             "type": "string"
           }
         ],
+        "security": [
+          {
+            "Token": []
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
           },
           "400": {
-            "description": "No such user found in db"
+            "description": "No such user found in db || Could not delete an image"
+          },
+          "401": {
+            "$ref": "#/responses/401"
           },
           "404": {
             "description": "Could not find an image with that id"
-          },
-          "405": {
-            "description": "Could not delete an image"
           }
         }
       }
     },
     "/api/recognise": {
       "post": {
-        "tags": [
-          "api"
-        ],
+        "tags": ["api"],
         "summary": "Recognise face on image",
         "description": "Recognise face on image",
-        "consumes": [
-          "multipart/form-data"
-        ],
+        "consumes": ["multipart/form-data"],
         "parameters": [
-          {
-            "in": "header",
-            "name": "Token",
-            "description": "Authorization token",
-            "required": true,
-            "type": "string"
-          },
           {
             "in": "formData",
             "name": "image",
@@ -195,20 +150,22 @@
             "type": "file"
           }
         ],
+        "security": [
+          {
+            "Token": []
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Face recognised successfully"
           },
           "400": {
-            "description": "No image or name was delivered"
+            "description": "No image or name was delivered || No such user found in db || Limit of images per user exceeded"
           },
-          "405": {
-            "description": "No such user found in db"
+          "401": {
+            "$ref": "#/responses/401"
           },
-          "406": {
-            "description": "Limit of images per user exceeded"
-          },
-          "407": {
+          "404": {
             "description": "No face found"
           }
         }
@@ -218,8 +175,9 @@
   "securityDefinitions": {
     "Token": {
       "type": "apiKey",
-      "name": "Token",
-      "in": "header"
+      "name": "Authorization",
+      "in": "header",
+      "description": "Bearer {token}"
     }
   },
   "definitions": {
